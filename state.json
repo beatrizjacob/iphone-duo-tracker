@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "sources": {
+    "apple": {
+      "failures": 0,
+      "next_check": 1792869532.452348
+    },
+    "mediamarkt": {
+      "failures": 0,
+      "next_check": 1792869532.452348
+    },
+    "fnac": {}
+  },
+  "items": {
+    "apple:MK2D4QL/A:pickup:R368": {
+      "observed": {
+        "key": "apple:MK2D4QL/A:pickup:R368",
+        "retailer": "Apple Spain",
+        "capacity_gb": 256,
+        "channel": "pickup",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
+        "store_id": "R368",
+        "store_name": "Passeig de Gràcia",
+        "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
+        "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
+      }
+    },
+    "apple:MK2F4QL/A:pickup:R368": {
+      "observed": {
+        "key": "apple:MK2F4QL/A:pickup:R368",
+        "retailer": "Apple Spain",
+        "capacity_gb": 512,
+        "channel": "pickup",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
+        "store_id": "R368",
+        "store_name": "Passeig de Gràcia",
+        "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
+        "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-512gb-blanco-estelar"
+      }
+    },
+    "apple:MK2D4QL/A:pickup:R406": {
+      "observed": {
+        "key": "apple:MK2D4QL/A:pickup:R406",
+        "retailer": "Apple Spain",
+        "capacity_gb": 256,
+        "channel": "pickup",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
+        "store_id": "R406",
+        "store_name": "La Maquinista",
+        "scope": "Apple La Maquinista, Barcelona (R406)",
+        "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
+      }
+    },
+    "apple:MK2F4QL/A:pickup:R406": {
+      "observed": {
+        "key": "apple:MK2F4QL/A:pickup:R406",
+        "retailer": "Apple Spain",
+        "capacity_gb": 512,
+        "channel": "pickup",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
+        "store_id": "R406",
+        "store_name": "La Maquinista",
+        "scope": "Apple La Maquinista, Barcelona (R406)",
+        "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-512gb-blanco-estelar"
+      }
+    },
+    "mediamarkt:1674375:online_stock": {
+      "observed": {
+        "key": "mediamarkt:1674375:online_stock",
+        "retailer": "MediaMarkt Spain",
+        "capacity_gb": 256,
+        "channel": "online_stock",
+        "status": "unavailable",
+        "raw_status": "AVAILABLE_OUTSIDE_REASONABLE_TIME_FRAME",
+        "scope": "Spain-wide page; Barcelona postcode eligibility unverified",
+        "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-256-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674375.html"
+      }
+    },
+    "mediamarkt:1674375:pickup": {
+      "observed": {
+        "key": "mediamarkt:1674375:pickup",
+        "retailer": "MediaMarkt Spain",
+        "capacity_gb": 256,
+        "channel": "pickup",
+        "status": "unknown",
+        "scope": "Barcelona store inventory endpoint not verified",
+        "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-256-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674375.html"
+      }
+    },
+    "mediamarkt:1674377:online_stock": {
+      "observed": {
+        "key": "mediamarkt:1674377:online_stock",
+        "retailer": "MediaMarkt Spain",
+        "capacity_gb": 512,
+        "channel": "online_stock",
+        "status": "unavailable",
+        "raw_status": "NOT_AVAILABLE",
+        "scope": "Spain-wide page; Barcelona postcode eligibility unverified",
+        "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
+      }
+    },
+    "mediamarkt:1674377:pickup": {
+      "observed": {
+        "key": "mediamarkt:1674377:pickup",
+        "retailer": "MediaMarkt Spain",
+        "capacity_gb": 512,
+        "channel": "pickup",
+        "status": "unknown",
+        "scope": "Barcelona store inventory endpoint not verified",
+        "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
+      }
+    }
+  },
+  "last_run_utc": "2026-10-24T18:19:16.953028+00:00",
+  "last_health": "f00ec2c51a394d57bb9caf5c89eb7677672d6a1ac146b6b78e4a225cb23e2b7c"
+}
