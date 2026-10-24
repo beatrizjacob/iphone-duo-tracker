@@ -332,7 +332,10 @@ def main():
                 save(state_path, state)
             except RuntimeError as exc:
                 print(str(exc)); delivery_failure = True
-    return 1 if delivery_failure or (not observations and not offline) else 0
+    active_slots = [state['sources'].get(name, {}) for name, source in config['sources'].items() if source['enabled']]
+    no_result_failure = not observations and not offline and (not active_slots or any(
+        slot.get('paused') or slot.get('failures', 0) for slot in active_slots))
+    return 1 if delivery_failure or no_result_failure else 0
 
 if __name__ == '__main__':
     try: raise SystemExit(main())

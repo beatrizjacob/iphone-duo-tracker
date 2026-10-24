@@ -190,6 +190,14 @@ class RunIntegrationTests(unittest.TestCase):
             self.assertEqual(sender.call_count,2) # synthetic Apple stock alert + initial coverage
             self.assertEqual(self.run_monitor(config,state,sender,1792846801),0)
             self.assertEqual(sender.call_count,2)
+    def test_healthy_cooldown_is_a_successful_quiet_skip(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as directory:
+            config,state=self.setup_files(Path(directory)); sender=Mock(return_value={})
+            self.assertEqual(self.run_monitor(config,state,sender,1792843200),0)
+            self.assertEqual(sender.call_count,2)
+            self.assertEqual(self.run_monitor(config,state,sender,1792843800),0)
+            self.assertEqual(sender.call_count,2)
     def test_failed_telegram_not_marked_delivered_then_retried(self):
         from unittest.mock import Mock
         with tempfile.TemporaryDirectory() as directory:

@@ -45,7 +45,7 @@ A local normal-browser monitor could potentially read these visible estimates, b
 
 The private repository [beatrizjacob/iphone-duo-tracker](https://github.com/beatrizjacob/iphone-duo-tracker) was created on 24 October 2026. [Access-verification run 40119754890](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40119754890) completed successfully at 20:14 CEST on a GitHub-hosted Ubuntu runner.
 
-Its logs show all four Apple store/capacity combinations returned unavailable, with exact configured store IDs and part numbers. MediaMarkt's robots and category fetch also succeeded on that runner and returned the observed no-stock signals; pickup remains unknown. All 36 offline tests passed there as well. Fnac remained disabled.
+Its logs show all four Apple store/capacity combinations returned unavailable, with exact configured store IDs and part numbers. MediaMarkt's robots and category fetch also succeeded on that runner and returned the observed no-stock signals; pickup remains unknown. All 37 offline tests passed there as well. Fnac remained disabled.
 
 This verifies cloud access for that run, without cookies, proxies, challenge solving or fingerprint impersonation. It does not guarantee future access. The checker pauses if a retailer later blocks it. Telegram credentials and complete notification/state persistence are separate deployment checks.
 
@@ -84,6 +84,10 @@ Direct robots access returned 403 even though the page reader could display its 
 - Apple shipping: normal 256GB browser estimate observed; scheduled shipping not implemented.
 - Fnac: direct and browser access blocked; no automated adapter.
 - MediaMarkt: shipping signals conditional on access; local pickup unverified.
-- No Telegram credentials supplied: actual delivery needs the setup test.
+- Telegram secrets were entered privately by the user; local setup delivery was confirmed by the user, and GitHub delivery was accepted in the full deployment run.
 - Private GitHub deployment created; live notification setup is tracked separately.
-- 36 offline tests cover parsing, wrong identities, missing stores/parts, synthetic restock alerts, delivery failures, deduplication and durable state.
+- 37 offline tests cover parsing, wrong identities, missing stores/parts, synthetic restock alerts, delivery failures, deduplication and durable state.
+
+## Full notification deployment
+
+[Run 40120111752](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40120111752) passed at 20:19 CEST on 24 October 2026. Both secret names were present (values were not read); Telegram accepted the initial coverage report; the stock-state branch persisted all four Apple results and its successful report marker. Apple and MediaMarkt had zero source failures. The repository is private and the hourly workflow is active.

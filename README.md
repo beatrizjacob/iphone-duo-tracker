@@ -84,7 +84,7 @@ Under **Settings → Actions → General**, allow this repository's workflows. T
 4. Open the run's **Summary**. Confirm the explicit disabled/unknown sources. A green run with Apple pickup or MediaMarkt observations still means incomplete coverage. A red run with no observations can mean all sources are blocked. Review both the Summary and Telegram message.
 5. Open the `stock-state` branch and inspect `state.json` for pause reasons, next-check timestamps and last observations.
 
-The project is deployed in your private GitHub repository. Parser, notification decisions and state recovery passed 36 tests locally and on GitHub; retailer access also passed on GitHub. The complete Telegram notification run follows saving the two secrets.
+The project is deployed in your private GitHub repository. Parser, notification decisions and state recovery passed 37 tests locally and on GitHub; retailer access also passed on GitHub. The full [deployment run 40120111752](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40120111752) passed: Telegram accepted its initial coverage report and the stock-state branch was saved. The hourly workflow is active. Expected cooldown skips remain quiet and count as successful runs.
 
 ## Schedule and notification behavior
 
@@ -135,5 +135,5 @@ The fixtures contain reduced, real Apple pickup and MediaMarkt responses capture
 - `telegram_setup.py`: local token-safe private chat ID lookup.
 - `config.json`: product identities and explicit coverage limitations.
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
-- `tests/`: 36 meaningful offline tests, including local Git state recovery.
+- `tests/`: 37 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.
