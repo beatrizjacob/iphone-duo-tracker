@@ -14,7 +14,7 @@ The tracker checks whether the requested white 256GB or 512GB variant is availab
 
 Apple’s separate pickup endpoint returned HTTP 200 in two local tests. The response matched both requested white variants and the two Barcelona stores. The tracker alerts per store and capacity, suppressing unchanged results. Missing or unknown data is not interpreted as out of stock.
 
-**GitHub Actions access still needs its first test.** Requests succeeded from this computer; a GitHub-hosted runner may be blocked. A blocked source pauses and reports its failure. No proxies, fingerprint spoofing, cookie replay or challenge solving are used.
+**GitHub Actions access passed its first test** in [run 40119754890](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40119754890). Both Apple and MediaMarkt returned usable responses. Future requests may still be blocked. A blocked source pauses and reports its failure. No proxies, fingerprint spoofing, cookie replay or challenge solving are used.
 
 The stock-only configuration does not need Apple’s shipping endpoint. MediaMarkt’s observed delayed-order signal is treated as not in stock, and no delivery dates are included. See [VERIFICATION.md](VERIFICATION.md) for historical research evidence.
 
@@ -84,7 +84,7 @@ Under **Settings → Actions → General**, allow this repository's workflows. T
 4. Open the run's **Summary**. Confirm the explicit disabled/unknown sources. A green run with Apple pickup or MediaMarkt observations still means incomplete coverage. A red run with no observations can mean all sources are blocked. Review both the Summary and Telegram message.
 5. Open the `stock-state` branch and inspect `state.json` for pause reasons, next-check timestamps and last observations.
 
-I could test the parser, notification decisions and persistence locally; I could not test real Telegram delivery without your bot credentials, and this package has not been published or enabled in your GitHub account.
+The project is deployed in your private GitHub repository. Parser, notification decisions and state recovery passed 36 tests locally and on GitHub; retailer access also passed on GitHub. The complete Telegram notification run follows saving the two secrets.
 
 ## Schedule and notification behavior
 

@@ -41,11 +41,13 @@ In the normal [256GB product browser flow](https://www.apple.com/es/shop/buy-iph
 
 A local normal-browser monitor could potentially read these visible estimates, but that automation has not been built or validated here. The stock-only checker omits Apple shipping entirely.
 
-## GitHub Actions versus local execution
+## GitHub Actions deployment verified
 
-The updated checker was live-tested on this computer. No user repository was supplied and no GitHub workflow run was created, so GitHub-runner accessibility remains unverified. The [pickup-monitor maintainer](https://github.com/bilune/apple-pickup-monitor) reports datacenter IP rejection in their own deployment. This is a warning from another implementation, not a result from this project’s GitHub runner.
+The private repository [beatrizjacob/iphone-duo-tracker](https://github.com/beatrizjacob/iphone-duo-tracker) was created on 24 October 2026. [Access-verification run 40119754890](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40119754890) completed successfully at 20:14 CEST on a GitHub-hosted Ubuntu runner.
 
-Run the packaged workflow once to test the chosen execution environment. If it returns an access block, the source pauses. Local execution is an alternative because it has already worked here; no network rotation, residential proxy or browser impersonation is used to overcome cloud rejection.
+Its logs show all four Apple store/capacity combinations returned unavailable, with exact configured store IDs and part numbers. MediaMarkt's robots and category fetch also succeeded on that runner and returned the observed no-stock signals; pickup remains unknown. All 36 offline tests passed there as well. Fnac remained disabled.
+
+This verifies cloud access for that run, without cookies, proxies, challenge solving or fingerprint impersonation. It does not guarantee future access. The checker pauses if a retailer later blocks it. Telegram credentials and complete notification/state persistence are separate deployment checks.
 
 ## Fnac follow-up
 
@@ -78,10 +80,10 @@ Direct robots access returned 403 even though the page reader could display its 
 
 ## Remaining validation boundaries
 
-- Apple pickup: verified local HTTP response and implemented parser; GitHub-runner access and future uptime remain unproven.
+- Apple pickup: verified both locally and on a GitHub-hosted runner; future uptime remains unproven.
 - Apple shipping: normal 256GB browser estimate observed; scheduled shipping not implemented.
 - Fnac: direct and browser access blocked; no automated adapter.
 - MediaMarkt: shipping signals conditional on access; local pickup unverified.
 - No Telegram credentials supplied: actual delivery needs the setup test.
-- No GitHub deployment performed.
+- Private GitHub deployment created; live notification setup is tracked separately.
 - 36 offline tests cover parsing, wrong identities, missing stores/parts, synthetic restock alerts, delivery failures, deduplication and durable state.
