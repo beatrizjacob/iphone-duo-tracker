@@ -12,6 +12,5 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install playwright==1.64.1
-      - run: playwright install --with-deps chromium
       - name: Test the ordinary store selector once
         run: python research_store_browser.py

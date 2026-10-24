@@ -1,6 +1,6 @@
 """One-shot MediaMarkt browser feasibility test. No alerts, credentials or state.
 
-Uses ordinary Playwright Chromium, without stealth, proxy, custom user agent,
+Uses ordinary Playwright with installed Chrome, without stealth, proxy, custom user agent,
 saved cookies, challenge interaction or direct inventory API calls.
 """
 import asyncio
@@ -22,7 +22,7 @@ async def main():
         raise SystemExit('Product page disallowed; stopping browser research')
     await asyncio.sleep(max(10, delay))
     async with async_playwright() as p:
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(channel='chrome')
         page = await browser.new_page(locale='es-ES')
         page.set_default_timeout(15000)
         inventories, blocks = [], []

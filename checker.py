@@ -182,7 +182,9 @@ class AmazonProductHTML(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
-        target = attrs.get('id') if attrs.get('id') in ('productTitle', 'availability') else None
+        field_id = attrs.get('id', '')
+        target = field_id if (field_id == 'productTitle' or
+                              re.search('availability|outofstock', field_id, re.I)) else None
         if tag == 'input' and attrs.get('id') in ('ASIN', 'merchantID'):
             self.inputs.setdefault(attrs['id'], set()).add(attrs.get('value', ''))
         if target:
@@ -210,6 +212,7 @@ class AmazonProductHTML(HTMLParser):
 
     def field(self, name):
         values = {' '.join(' '.join(parts).split()) for parts in self.fields.get(name, [])}
+        values.discard('')
         return values.pop() if len(values) == 1 else ''
 
 
@@ -227,7 +230,7 @@ def amazon_observation(html, product, merchant_id):
     negative = re.search(r'sin stock|no disponible|no est[aá] disponible|agotad[oa]|'
                          r'out of stock|unavailable|disponible (?:a partir|el )|'
                          r'preventa|reserva|pre[- ]?order|temporarily', normalized)
-    positive = re.match(r'^(?:en stock\b|in stock\b|solo quedan? \d+\b)', normalized)
+    positive = re.match(r'^(?:en stock\b|in stock\b|solo quedan? \d+\b[^.]*\ben stock\b)', normalized)
     status = 'unavailable' if negative else 'available' if positive else 'unknown'
     if page.inputs.get('merchantID') != {merchant_id}:
         status = 'unknown'
@@ -368,7 +371,17 @@ def main():
                         html = (Path(args.amazon_fixture) / f"{product['asin']}.html").read_text()
                     else:
                         html = checked_fetch(product['url'], config['interval_seconds'])
-                    items.append(amazon_observation(html, product, source['merchant_id']))
+                    item = amazon_observation(html, product, source['merchant_id'])
+                    if args.dry_run and item['status'] == 'unknown':
+                        diagnostic = AmazonProductHTML()
+                        diagnostic.feed(html)
+                        print(json.dumps({'amazon_diagnostic_asin': product['asin'],
+                            'availability_fields': {name: [' '.join(' '.join(parts).split())[:400]
+                                for parts in values[:4]] for name, values in diagnostic.fields.items()
+                                if name != 'productTitle'},
+                            'selected_merchant_ids': sorted(diagnostic.inputs.get('merchantID', set()))},
+                            ensure_ascii=False))
+                    items.append(item)
                 observations.extend(items)
             else:
                 raise StopSource('No verified working inventory adapter', permanent=True)

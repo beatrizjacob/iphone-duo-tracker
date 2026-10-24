@@ -133,6 +133,11 @@ class AmazonTests(unittest.TestCase):
     def test_unknown_wording_stays_unknown(self):
         self.html=self.html.replace('Temporalmente sin stock.', 'Consultar disponibilidad.')
         self.assertEqual(self.observe()['status'],'unknown')
+    def test_synthetic_low_stock_requires_explicit_stock_wording(self):
+        self.html=self.html.replace('Temporalmente sin stock.', 'Solo quedan 2 en stock.')
+        self.assertEqual(self.observe()['status'],'available')
+        self.html=self.html.replace('Solo quedan 2 en stock.', 'Solo quedan 2 ofertas.')
+        self.assertEqual(self.observe()['status'],'unknown')
     def test_future_stock_never_alerts(self):
         self.html=self.html.replace('Temporalmente sin stock.', 'Disponible a partir del 1 de diciembre.')
         self.assertEqual(self.observe()['status'],'unavailable')
