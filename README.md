@@ -18,6 +18,14 @@ Apple’s separate pickup endpoint returned HTTP 200 in two local tests. The res
 
 The stock-only configuration does not need Apple’s shipping endpoint. MediaMarkt’s observed delayed-order signal is treated as not in stock, and no delivery dates are included. See [VERIFICATION.md](VERIFICATION.md) for historical research evidence.
 
+## Deployed repository
+
+The requested private repository is [beatrizjacob/iphone-duo-tracker](https://github.com/beatrizjacob/iphone-duo-tracker). The workflow runs hourly at minute 17. Private Actions usage draws from the account's included allowance; this project does not alter billing settings.
+
+For private local setup, run `python3 setup_github.py --repo beatrizjacob/iphone-duo-tracker`. The helper asks for the bot token with hidden input, lets you select your own chat, saves both GitHub Actions secrets through the existing GitHub login, and sends a setup message. It does not print the token or store it in a local file. The local `.setup-complete.json` receipt contains only the repository name and completion flags and is ignored by Git.
+
+A manual workflow run with `verify_access=true` tests retailers without secrets or state changes. A normal workflow run tests the complete setup after secrets have been saved.
+
 ## 1. Create your Telegram bot
 
 1. Open the official [@BotFather](https://t.me/BotFather) in Telegram. Send `/newbot` and follow the name/username prompts.

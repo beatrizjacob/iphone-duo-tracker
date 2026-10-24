@@ -54,7 +54,7 @@ def main():
     telegram('sendMessage', {'chat_id': chat_id, 'text': 'iPhone stock tracker setup is connected. This is a setup test, not a stock alert.'}, token)
     # Receipt contains no token, chat ID, names, or message content.
     from pathlib import Path
-    Path('.setup-complete.json').write_text(json.dumps({'repo': args.repo, 'secrets_saved': True, 'test_sent': True}))
+    Path(__file__).with_name('.setup-complete.json').write_text(json.dumps({'repo': args.repo, 'secrets_saved': True, 'test_sent': True}))
     print('\nDone. Both GitHub secrets are saved and a Telegram setup message was sent.')
     print('Return to Codex and say: Telegram setup done.')
 
