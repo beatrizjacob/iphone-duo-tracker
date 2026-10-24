@@ -1,0 +1,99 @@
+{
+  "head": {
+    "status": "200",
+    "data": {}
+  },
+  "body": {
+    "location": "08002",
+    "stores": [
+      {
+        "storeNumber": "R368",
+        "storeName": "Passeig de Gràcia",
+        "country": "ES",
+        "city": "Barcelona",
+        "partsAvailability": {
+          "MK2D4QL/A": {
+            "partNumber": "MK2D4QL/A",
+            "pickupDisplay": "unavailable",
+            "pickupSearchQuote": "No disponible en este momento",
+            "storePickEligible": true,
+            "messageTypes": {
+              "regular": {
+                "storeSearchEnabled": true,
+                "storePickupLabel": "Recogida:",
+                "storeSelectionEnabled": false,
+                "storePickupQuote": "No disponible en este momento en el Apple Passeig de Gràcia",
+                "storePickupQuote2_0": "No disponible en este momento en el <button type=\"button\" class=\"rf-pickup-quote-overlay-trigger as-retailavailabilitytrigger-infobutton retail-availability-search-trigger as-buttonlink as-buttonlink-inline\" data-ase-overlay=\"buac-overlay\" data-ase-click=\"show\">Apple Passeig de Gràcia</button>",
+                "storePickupLinkText": "Ver disponibilidad",
+                "storePickupProductTitle": "iPhone Duo de 256 GB en blanco estelar",
+                "basePartNumber": "MK2D4"
+              }
+            }
+          },
+          "MK2F4QL/A": {
+            "partNumber": "MK2F4QL/A",
+            "pickupDisplay": "unavailable",
+            "pickupSearchQuote": "No disponible en este momento",
+            "storePickEligible": true,
+            "messageTypes": {
+              "regular": {
+                "storeSearchEnabled": true,
+                "storePickupLabel": "Recogida:",
+                "storeSelectionEnabled": false,
+                "storePickupQuote": "No disponible en este momento en el Apple Passeig de Gràcia",
+                "storePickupQuote2_0": "No disponible en este momento en el <button type=\"button\" class=\"rf-pickup-quote-overlay-trigger as-retailavailabilitytrigger-infobutton retail-availability-search-trigger as-buttonlink as-buttonlink-inline\" data-ase-overlay=\"buac-overlay\" data-ase-click=\"show\">Apple Passeig de Gràcia</button>",
+                "storePickupLinkText": "Ver disponibilidad",
+                "storePickupProductTitle": "iPhone Duo de 512 GB en blanco estelar",
+                "basePartNumber": "MK2F4"
+              }
+            }
+          }
+        }
+      },
+      {
+        "storeNumber": "R406",
+        "storeName": "La Maquinista",
+        "country": "ES",
+        "city": "Barcelona",
+        "partsAvailability": {
+          "MK2D4QL/A": {
+            "partNumber": "MK2D4QL/A",
+            "pickupDisplay": "unavailable",
+            "pickupSearchQuote": "No disponible en este momento",
+            "storePickEligible": true,
+            "messageTypes": {
+              "regular": {
+                "storeSearchEnabled": true,
+                "storePickupLabel": "Recogida:",
+                "storeSelectionEnabled": false,
+                "storePickupQuote": "No disponible en este momento en el Apple La Maquinista",
+                "storePickupQuote2_0": "No disponible en este momento en el <button type=\"button\" class=\"rf-pickup-quote-overlay-trigger as-retailavailabilitytrigger-infobutton retail-availability-search-trigger as-buttonlink as-buttonlink-inline\" data-ase-overlay=\"buac-overlay\" data-ase-click=\"show\">Apple La Maquinista</button>",
+                "storePickupLinkText": "Ver disponibilidad",
+                "storePickupProductTitle": "iPhone Duo de 256 GB en blanco estelar",
+                "basePartNumber": "MK2D4"
+              }
+            }
+          },
+          "MK2F4QL/A": {
+            "partNumber": "MK2F4QL/A",
+            "pickupDisplay": "unavailable",
+            "pickupSearchQuote": "No disponible en este momento",
+            "storePickEligible": true,
+            "messageTypes": {
+              "regular": {
+                "storeSearchEnabled": true,
+                "storePickupLabel": "Recogida:",
+                "storeSelectionEnabled": false,
+                "storePickupQuote": "No disponible en este momento en el Apple La Maquinista",
+                "storePickupQuote2_0": "No disponible en este momento en el <button type=\"button\" class=\"rf-pickup-quote-overlay-trigger as-retailavailabilitytrigger-infobutton retail-availability-search-trigger as-buttonlink as-buttonlink-inline\" data-ase-overlay=\"buac-overlay\" data-ase-click=\"show\">Apple La Maquinista</button>",
+                "storePickupLinkText": "Ver disponibilidad",
+                "storePickupProductTitle": "iPhone Duo de 512 GB en blanco estelar",
+                "basePartNumber": "MK2F4"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

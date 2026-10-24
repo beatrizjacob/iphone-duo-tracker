@@ -1,0 +1,39 @@
+{
+  "checked_at_utc": "2026-10-24T17:38:53.918716+00:00",
+  "http_status": 200,
+  "url": "https://www.apple.com/es/shop/retail/pickup-message?pl=true&location=08002&parts.0=MK2D4QL%2FA&parts.1=MK2F4QL%2FA",
+  "transport": "StockWatch/1.0 (personal low-frequency availability monitor); standard urllib; no cookies or authentication",
+  "scope": "Observed from this computer; GitHub-hosted runner not tested",
+  "stores": [
+    {
+      "id": "R368",
+      "name": "Passeig de Gràcia",
+      "products": {
+        "MK2D4QL/A": {
+          "pickupDisplay": "unavailable",
+          "quote": "No disponible en este momento"
+        },
+        "MK2F4QL/A": {
+          "pickupDisplay": "unavailable",
+          "quote": "No disponible en este momento"
+        }
+      }
+    },
+    {
+      "id": "R406",
+      "name": "La Maquinista",
+      "products": {
+        "MK2D4QL/A": {
+          "pickupDisplay": "unavailable",
+          "quote": "No disponible en este momento"
+        },
+        "MK2F4QL/A": {
+          "pickupDisplay": "unavailable",
+          "quote": "No disponible en este momento"
+        }
+      }
+    }
+  ],
+  "shipping_corrected_query_status": 541,
+  "fnac_browser": "DataDome CAPTCHA; no challenge interaction performed"
+}

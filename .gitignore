@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+state.json
+.state-parent
+*.tmp
+
+.setup-complete.json

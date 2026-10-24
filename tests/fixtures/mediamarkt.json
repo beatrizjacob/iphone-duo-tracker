@@ -1,0 +1,89 @@
+{
+  "CofrPickupFeature:Media:es:1674375": {
+    "__typename": "CofrPickupFeature",
+    "id": "Media:es:1674375",
+    "storeId": null,
+    "isInAssortment": true,
+    "isProductOfTypeMarketplace": false,
+    "pickupStatus": "NO_STORE_SELECTED",
+    "displayStatus": "PARTIALLY_AVAILABLE",
+    "releaseDate": "2026-10-23T00:00:00.000Z",
+    "isProductPickable": true,
+    "isDemonstrationModelAvailable": null,
+    "fulfillmentTime": null
+  },
+  "CofrDeliveryFeature:Media:es:1674375": {
+    "__typename": "CofrDeliveryFeature",
+    "id": "Media:es:1674375",
+    "zipCode": null,
+    "shippingCost": 0,
+    "loyaltyPromoShippingCost": null,
+    "isLoyaltyPromoLowest": false,
+    "isInAssortment": true,
+    "isProductOfTypeMarketplace": false,
+    "isProductOfTypeDigitalDownload": false,
+    "isProductOfTypeDigitalSubscription": false,
+    "releaseDate": "2026-10-23T00:00:00.000Z",
+    "delivery": {
+      "__typename": "CofrDeliveryFeatureDelivery",
+      "deliveryStatus": "AVAILABLE_OUTSIDE_REASONABLE_TIME_FRAME",
+      "displayStatus": "PARTIALLY_AVAILABLE",
+      "isShippedFromStore": false,
+      "isZipCodeCheckNeeded": false,
+      "isDistanceBased": false,
+      "fulfillmentTime": {
+        "__typename": "CofrDeliveryFulfillmentTime",
+        "earliest": "2026-11-13T07:00:00.000Z",
+        "latest": "2026-11-13T20:00:00.000Z",
+        "validUntil": "2026-11-12T17:30:00.000Z"
+      }
+    },
+    "deliveryWithZipCode": null
+  },
+  "GraphqlProduct:Media:es-ES:1674375": {
+    "id": "1674375",
+    "title": "Apple iPhone Duo, Blanco estrella, 256 GB, 7.6\" OLED Super Retina XDR, Plegable, 5G, Chip A20 Pro, Siri AI, iOS",
+    "url": "/es/product/_apple-iphone-duo-blanco-estrella-256-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674375.html"
+  },
+  "CofrPickupFeature:Media:es:1674377": {
+    "__typename": "CofrPickupFeature",
+    "id": "Media:es:1674377",
+    "storeId": null,
+    "isInAssortment": true,
+    "isProductOfTypeMarketplace": false,
+    "pickupStatus": "NO_STORE_SELECTED",
+    "displayStatus": "PARTIALLY_AVAILABLE",
+    "releaseDate": "2026-10-23T00:00:00.000Z",
+    "isProductPickable": true,
+    "isDemonstrationModelAvailable": null,
+    "fulfillmentTime": null
+  },
+  "CofrDeliveryFeature:Media:es:1674377": {
+    "__typename": "CofrDeliveryFeature",
+    "id": "Media:es:1674377",
+    "zipCode": null,
+    "shippingCost": 0,
+    "loyaltyPromoShippingCost": null,
+    "isLoyaltyPromoLowest": false,
+    "isInAssortment": true,
+    "isProductOfTypeMarketplace": false,
+    "isProductOfTypeDigitalDownload": false,
+    "isProductOfTypeDigitalSubscription": false,
+    "releaseDate": "2026-10-23T00:00:00.000Z",
+    "delivery": {
+      "__typename": "CofrDeliveryFeatureDelivery",
+      "deliveryStatus": "NOT_AVAILABLE",
+      "displayStatus": "NOT_AVAILABLE",
+      "isShippedFromStore": null,
+      "isZipCodeCheckNeeded": false,
+      "isDistanceBased": null,
+      "fulfillmentTime": null
+    },
+    "deliveryWithZipCode": null
+  },
+  "GraphqlProduct:Media:es-ES:1674377": {
+    "id": "1674377",
+    "title": "Apple iPhone Duo, Blanco estrella, 512 GB, 7.6\" OLED Super Retina XDR, Plegable, 5G, Chip A20 Pro, Siri AI, iOS",
+    "url": "/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
+  }
+}

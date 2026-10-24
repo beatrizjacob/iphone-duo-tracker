@@ -1,0 +1,57 @@
+{
+  "interval_seconds": 3600,
+  "region": "Barcelona",
+  "postal_code": "08002",
+  "sources": {
+    "apple": {
+      "enabled": true,
+      "reason": "Barcelona store stock verified; stock-only pickup monitoring enabled.",
+      "listing_url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo",
+      "products": [
+        {
+          "capacity_gb": 256,
+          "part": "MK2D4QL/A",
+          "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
+        },
+        {
+          "capacity_gb": 512,
+          "part": "MK2F4QL/A",
+          "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-512gb-blanco-estelar"
+        }
+      ],
+      "url": "https://www.apple.com/es/shop/retail/pickup-message",
+      "stores": {
+        "R368": "Passeig de Gràcia",
+        "R406": "La Maquinista"
+      }
+    },
+    "mediamarkt": {
+      "enabled": true,
+      "url": "https://www.mediamarkt.es/es/brand/apple/iphone/iphone-duo",
+      "products": [
+        {
+          "capacity_gb": 256,
+          "id": "1674375"
+        },
+        {
+          "capacity_gb": 512,
+          "id": "1674377"
+        }
+      ]
+    },
+    "fnac": {
+      "enabled": false,
+      "reason": "Direct product request returned HTTP 403 on 2026-10-24; inventory API unverified. Do not retry or bypass.",
+      "products": [
+        {
+          "capacity_gb": 256,
+          "url": "https://www.fnac.es/Apple-iPhone-Duo-7-6-256-GB-Blanco-estelar-Telefono-movil/a13483448"
+        },
+        {
+          "capacity_gb": 512,
+          "url": "https://www.fnac.es/Apple-iPhone-Duo-7-6-512-GB-Blanco-estelar-Telefono-movil/a13483450"
+        }
+      ]
+    }
+  }
+}

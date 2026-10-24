@@ -1,0 +1,54 @@
+name: iPhone stock monitor
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+    inputs:
+      test_telegram:
+        description: Send a setup test instead of checking retailers
+        type: boolean
+        default: false
+      verify_access:
+        description: Verify retailer access without Telegram or state changes
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: iphone-stock-monitor
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run offline tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify retailer access
+        if: inputs.verify_access == true
+        run: python checker.py --dry-run
+      - name: Test Telegram
+        if: inputs.test_telegram == true && inputs.verify_access != true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python checker.py --test-telegram
+      - name: Load persistent state
+        id: state
+        if: inputs.test_telegram != true && inputs.verify_access != true
+        run: python state_git.py load
+      - name: Check stock
+        if: inputs.test_telegram != true && inputs.verify_access != true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python checker.py
+      - name: Save state even after checker failure
+        if: always() && steps.state.outcome == 'success'
+        run: python state_git.py save
