@@ -17,7 +17,7 @@ class ParsingTests(unittest.TestCase):
             return c.mm_observations(self.data, PRODUCTS)
     def test_real_snapshot(self):
         result = self.observe()
-        self.assertEqual([x['status'] for x in result], ['unavailable','unknown','unavailable','unknown'])
+        self.assertEqual([x['status'] for x in result], ['unavailable','unavailable'])
         self.assertNotIn('earliest', result[0])
         self.assertNotIn('latest', result[0])
     def test_html_extraction(self):
@@ -39,8 +39,8 @@ class ParsingTests(unittest.TestCase):
     def test_expired_estimate(self):
         with patch('checker.time.time',return_value=2_000_000_000):
             self.assertEqual(c.mm_observations(self.data,PRODUCTS)[0]['status'],'unknown')
-    def test_no_store_selected_never_pickup_stock(self):
-        self.assertTrue(all(x['status']=='unknown' for x in self.observe() if x['channel']=='pickup'))
+    def test_unsupported_pickup_is_not_reported(self):
+        self.assertFalse(any(x['channel']=='pickup' for x in self.observe()))
 
 class AppleTests(unittest.TestCase):
     def setUp(self):
@@ -217,6 +217,60 @@ class AccessTests(unittest.TestCase):
             with self.assertRaises(RuntimeError) as ctx: c.telegram('sendMessage',{},'secret-token')
             self.assertNotIn('secret-token',str(ctx.exception))
 
+class MessageTests(unittest.TestCase):
+    def setUp(self):
+        self.now=1792843200
+        self.config=json.loads(Path('config.json').read_text())
+        self.state={'sources':{name:{'last_success_at':self.now} for name in self.config['sources']},'items':{}}
+        items=c.apple_observations(json.loads(Path('tests/fixtures/apple-pickup.json').read_text()),
+                                   self.config['sources']['apple'],'08002')
+        with patch('checker.time.time',return_value=self.now):
+            items+=c.mm_observations(json.loads(FIXTURE.read_text()),PRODUCTS)
+        for product in self.config['sources']['amazon']['products']:
+            items.append(c.amazon_observation(Path(f"tests/fixtures/amazon-cloud/{product['asin']}.html").read_text(),
+                                              product,self.config['sources']['amazon']['merchant_id']))
+        self.state['items']={x['key']:{'observed':x} for x in items}
+    def test_grouped_report_has_no_ids_raw_enums_or_excluded_sources(self):
+        message=c.coverage_message(self.config,self.state,self.now)
+        self.assertIn('<b>🍎 Apple · Barcelona pickup</b>',message)
+        self.assertIn('Passeig de Gràcia',message)
+        self.assertIn('<b>🛍 MediaMarkt · Online</b>',message)
+        self.assertIn('512GB — ⚪ Out of stock',message)
+        for technical in ['fnac','mediamarkt:','MK2D4QL','AVAILABLE_OUTSIDE','stock-state','inventory endpoint']:
+            self.assertNotIn(technical,message)
+        self.assertLess(len(message),3900)
+    def test_markup_is_balanced_and_valid(self):
+        import xml.etree.ElementTree as xml
+        xml.fromstring('<message>'+c.coverage_message(self.config,self.state,self.now)+'</message>')
+        item=next(iter(self.state['items'].values()))['observed']
+        xml.fromstring('<message>'+c.stock_alert_message(item,self.now)+'</message>')
+    def test_dynamic_labels_and_link_attributes_are_escaped(self):
+        item=next(iter(self.state['items'].values()))['observed'].copy()
+        item['store_name']='Mall <script> & "shop"'
+        item['url']='https://www.apple.com/es/?x=1&y="onclick"'
+        message=c.stock_alert_message(item,self.now)
+        self.assertIn('&lt;script&gt;',message)
+        self.assertIn('&amp;',message)
+        self.assertIn('&quot;onclick&quot;',message)
+        self.assertNotIn('<script>',message)
+    def test_active_block_is_a_warning_without_stale_stock_claims(self):
+        self.state['sources']['amazon'].update(paused=True,failures=1)
+        message=c.coverage_message(self.config,self.state,self.now)
+        amazon_section=message.split('📦 Amazon',1)[1]
+        self.assertIn('Checks paused',amazon_section)
+        self.assertNotIn('Out of stock',amazon_section)
+    def test_disabled_source_is_omitted(self):
+        self.config['sources']['fnac']={'enabled':False}
+        self.assertNotIn('fnac',c.coverage_message(self.config,self.state,self.now).lower())
+    def test_old_results_are_labeled_with_last_check_time(self):
+        self.assertIn('Last checked',c.coverage_message(self.config,self.state,self.now+600))
+    def test_barcelona_time_uses_summer_and_winter_offsets(self):
+        import datetime as dt
+        summer=dt.datetime(2026,10,24,12,tzinfo=dt.timezone.utc).timestamp()
+        winter=dt.datetime(2026,10,25,12,tzinfo=dt.timezone.utc).timestamp()
+        self.assertIn('14:00',c.local_time(summer))
+        self.assertIn('13:00',c.local_time(winter))
+
 class IntervalTests(unittest.TestCase):
     def test_old_successful_hourly_deadline_uses_new_interval(self):
         slot={'next_check':4600,'failures':0}
@@ -315,5 +369,20 @@ class RunIntegrationTests(unittest.TestCase):
             self.assertTrue(saved['sources']['amazon']['paused'])
             self.assertTrue(any(key.startswith('apple:') for key in saved['items']))
             self.assertFalse(any(key.startswith('amazon:') for key in saved['items']))
+    def test_old_unsupported_entries_are_pruned_and_html_messages_are_sent(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as directory:
+            config,state=self.setup_files(Path(directory));sender=Mock(return_value={})
+            state.write_text(json.dumps({'version':1,'sources':{'fnac':{}},'items':{
+                'fnac:old':{'observed':{'status':'unknown','channel':'online_stock'}},
+                'mediamarkt:1674375:pickup':{'observed':{'status':'unknown','channel':'pickup'}}}}))
+            self.assertEqual(self.run_monitor(config,state,sender,1792843200),0)
+            saved=json.loads(state.read_text())
+            self.assertNotIn('fnac',saved['sources'])
+            self.assertNotIn('fnac:old',saved['items'])
+            self.assertNotIn('mediamarkt:1674375:pickup',saved['items'])
+            for call in sender.call_args_list:
+                self.assertEqual(call.args[1]['parse_mode'],'HTML')
+                self.assertNotIn('fnac',call.args[1]['text'].lower())
 
 if __name__=='__main__':unittest.main()

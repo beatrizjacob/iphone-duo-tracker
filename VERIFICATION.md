@@ -108,3 +108,12 @@ The user approved changing this repository to public so the standard GitHub-host
 - Detailed evidence, alternatives and cloud-hosting tradeoffs are in [RESEARCH.md](RESEARCH.md). Dot and Oracle have not been configured; [DOT-TEST.txt](DOT-TEST.txt) is a manual one-check access test request.
 
 The complete [deployment run 40123646213](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123646213) passed all 57 tests and the stock check. Amazon returned unavailable for both capacities; its saved source state has zero failures and the two observations are present on `stock-state`. The updated Telegram coverage report was accepted and its deduplication fingerprint was saved. The ten-minute workflow schedule is unchanged.
+
+
+## Simplified Telegram reporting (24 October 2026)
+
+Fnac was removed from the active configuration. MediaMarkt online checks were retained because the saved live source state showed zero failures; its unsupported pickup placeholders are no longer emitted. Old inactive-source and MediaMarkt-pickup records are removed from current state without resetting Apple/Amazon alert history.
+
+Telegram reports and stock alerts now use HTML formatting, retailer sections, plain stock labels, spacing, product links in stock alerts and Europe/Madrid local time. Disabled/excluded checks are omitted; newly failing active sources still receive clear warnings without displaying stale stock as current. Formatting changes do not re-arm stock alerts. One refreshed coverage report is sent after migration, with unchanged runs remaining quiet.
+
+All 65 offline tests passed, including rendering/escaping, unknown/paused-source honesty, summer/winter timezone changes, unsupported-entry migration and existing notification deduplication.

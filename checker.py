@@ -12,10 +12,13 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from html.parser import HTMLParser
+from html import escape
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 UA = 'StockWatch/1.0 (personal low-frequency product availability monitor)'
-HOSTS = {'www.apple.com', 'www.mediamarkt.es', 'www.fnac.es', 'www.amazon.es'}
+HOSTS = {'www.apple.com', 'www.mediamarkt.es', 'www.amazon.es'}
+MESSAGE_VERSION = 2
 
 class StopSource(Exception):
     def __init__(self, reason, delay=3600, permanent=False):
@@ -129,10 +132,6 @@ def mm_observations(data, products):
                         'capacity_gb': product['capacity_gb'], 'channel': 'online_stock', 'status': kind,
                         'raw_status': status,
                         'scope': 'Spain-wide page; Barcelona postcode eligibility unverified',
-                        'url': 'https://www.mediamarkt.es' + identity['url']})
-        results.append({'key': f'mediamarkt:{pid}:pickup', 'retailer': 'MediaMarkt Spain',
-                        'capacity_gb': product['capacity_gb'], 'channel': 'pickup', 'status': 'unknown',
-                        'scope': 'Barcelona store inventory endpoint not verified',
                         'url': 'https://www.mediamarkt.es' + identity['url']})
     return results
 
@@ -279,6 +278,74 @@ def record_observation(item, previous):
     if item['status'] == 'unavailable':
         previous.pop('last_alert', None)
 
+def local_time(timestamp):
+    return dt.datetime.fromtimestamp(timestamp, ZoneInfo('Europe/Madrid')).strftime('%d %b %Y · %H:%M')
+
+def safe_text(value, limit=160):
+    # Bound before escaping so truncation cannot break an HTML entity/tag.
+    return escape(str(value)[:limit], quote=True)
+
+def stock_label(status):
+    return {'available': '🟢 In stock', 'unavailable': '⚪ Out of stock'}.get(status, '⚠️ Could not confirm')
+
+def stock_alert_message(item, now):
+    name = item['retailer'].removesuffix(' Spain')
+    lines = ['🟢 <b>iPhone Duo in stock</b>', '',
+             f"📱 White · <b>{safe_text(item['capacity_gb'])}GB</b>",
+             f'🛍 <b>{safe_text(name)}</b>']
+    if item['channel'] == 'pickup':
+        lines += [f"📍 {safe_text(item['store_name'])}, Barcelona", 'Available for pickup']
+    else:
+        lines += ['Available online']
+        if name == 'Amazon':
+            lines += ['Sold by Amazon']
+    lines += ['', f'<a href="{safe_text(item["url"], 1000)}">View product →</a>', '',
+              f'🕒 {local_time(now)} (Barcelona)',
+              '<i>Confirm availability and eligibility at checkout.</i>']
+    return '\n'.join(lines)
+
+def coverage_message(config, state, now):
+    lines = ['📱 <b>iPhone Duo · Stock update</b>', 'White · 256GB / 512GB']
+    headings = {'apple': '🍎 Apple · Barcelona pickup',
+                'amazon': '📦 Amazon · Sold by Amazon',
+                'mediamarkt': '🛍 MediaMarkt · Online'}
+    for name, source in config['sources'].items():
+        if not source['enabled']:
+            continue
+        lines += ['', f'<b>{safe_text(headings.get(name, name))}</b>']
+        slot = state['sources'].get(name, {})
+        if slot.get('paused'):
+            lines += ['⚠️ Checks paused — access or product data needs review.']
+            continue
+        if slot.get('failures', 0):
+            lines += ['⚠️ Check temporarily unavailable. Will retry later.']
+            continue
+        items = [value['observed'] for key, value in state['items'].items()
+                 if key.split(':', 1)[0] == name]
+        if name == 'apple':
+            for store_id, store_name in source['stores'].items():
+                lines += [f'<b>{safe_text(store_name)}</b>']
+                for product in source['products']:
+                    item = next((x for x in items if x.get('store_id') == store_id
+                                 and x['capacity_gb'] == product['capacity_gb']), {})
+                    lines += [f"{product['capacity_gb']}GB — {stock_label(item.get('status'))}"]
+        else:
+            for product in source['products']:
+                item = next((x for x in items if x['capacity_gb'] == product['capacity_gb']
+                             and x['channel'] == 'online_stock'), {})
+                lines += [f"{product['capacity_gb']}GB — {stock_label(item.get('status'))}"]
+        last_success = slot.get('last_success_at')
+        if last_success and now - last_success > 120:
+            lines += [f'<i>Last checked {local_time(last_success)} (Barcelona)</i>']
+    lines += ['', f'🕒 Updated {local_time(now)} (Barcelona)',
+              'Checks scheduled every 10 minutes.',
+              '<i>Stock alerts arrive when availability is confirmed. Routine checks stay quiet.</i>']
+    return '\n'.join(lines)
+
+def send_formatted_message(chat, message, token):
+    telegram('sendMessage', {'chat_id': chat, 'text': message, 'parse_mode': 'HTML',
+        'link_preview_options': {'is_disabled': True}}, token)
+
 def telegram(method, payload, token):
     body = json.dumps(payload).encode()
     req = urllib.request.Request(f'https://api.telegram.org/bot{token}/{method}', data=body,
@@ -318,7 +385,7 @@ def main():
     parser.add_argument('--apple-fixture', help='Offline Apple pickup JSON, no network or Telegram')
     parser.add_argument('--amazon-fixture', help='Directory of offline ASIN.html fixtures, no network or Telegram')
     parser.add_argument('--test-telegram', action='store_true')
-    parser.add_argument('--reset-source', choices=['apple', 'mediamarkt', 'fnac', 'amazon'])
+    parser.add_argument('--reset-source', choices=['apple', 'mediamarkt', 'amazon'])
     args = parser.parse_args()
     token, chat = os.getenv('TELEGRAM_BOT_TOKEN'), os.getenv('TELEGRAM_CHAT_ID')
     if args.test_telegram:
@@ -329,13 +396,18 @@ def main():
     state_path = Path(args.state)
     state = json.loads(state_path.read_text()) if state_path.exists() else {'version': 1, 'sources': {}, 'items': {}}
     if state.get('version') != 1: raise SystemExit('Unsupported state format; refusing to reset deduplication')
+    active_names = {name for name, source in config['sources'].items() if source['enabled']}
+    state['sources'] = {name: value for name, value in state['sources'].items() if name in active_names}
     for previous in state['items'].values():
         item = previous.get('observed', {})
         legacy = {key: item.get(key) for key in ('status', 'earliest', 'latest', 'scope', 'quote')}
         if previous.get('last_alert') == hashlib.sha256(json.dumps(legacy, sort_keys=True).encode()).hexdigest():
             previous['last_alert'] = fingerprint(item)
     state['items'] = {key: value for key, value in state['items'].items()
-                      if value.get('observed', {}).get('channel') != 'shipping'}
+                      if key.split(':', 1)[0] in active_names
+                      and value.get('observed', {}).get('channel') != 'shipping'
+                      and not (key.startswith('mediamarkt:')
+                               and value.get('observed', {}).get('channel') == 'pickup')}
     if args.reset_source:
         state['sources'].pop(args.reset_source, None)
         if not args.dry_run: save(state_path, state)
@@ -412,12 +484,9 @@ def main():
         print(json.dumps(item, ensure_ascii=False))
         if should_alert(item, previous):
             if args.dry_run or offline: print('Would notify (offline/dry run)'); continue
-            label = 'In stock'
-            message = (f"{label}\n{item['retailer']} • White {item['capacity_gb']}GB • {item['channel']}\n"
-                       f"{item['scope']}\n"
-                       f"Checked: {dt.datetime.now(dt.timezone.utc).isoformat()}\n{item['url']}\nConfirm at checkout.")
+            message = stock_alert_message(item, time.time())
             try:
-                telegram('sendMessage', {'chat_id': chat, 'text': message, 'link_preview_options': {'is_disabled': True}}, token)
+                send_formatted_message(chat, message, token)
                 previous['last_alert'] = fingerprint(item)
                 save(state_path, state)
             except RuntimeError as exc:
@@ -431,17 +500,16 @@ def main():
     if os.getenv('GITHUB_STEP_SUMMARY'):
         with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as file: file.write('\n'.join(summary) + '\n')
     if not offline and not args.dry_run:
-        status = 'degraded' if failures or any(x['status'] == 'unknown' for x in observations) else 'healthy'
-        health_issues = [(name, src['reason'] if not src['enabled'] else
-            state['sources'].get(name, {}).get('reason') if state['sources'].get(name, {}).get('failures', 0) else None)
-            for name, src in config['sources'].items()]
+        health_issues = [(name, state['sources'].get(name, {}).get('reason')
+                         if state['sources'].get(name, {}).get('failures', 0) else None)
+                         for name in active_names]
         health_unknown = [(key, value['observed'].get('raw_status')) for key, value in state['items'].items()
                           if value.get('observed', {}).get('status') == 'unknown']
-        health_key = hashlib.sha256(json.dumps({'issues': health_issues,
+        health_key = hashlib.sha256(json.dumps({'message_version': MESSAGE_VERSION, 'issues': sorted(health_issues),
             'unknown': sorted(health_unknown)}, sort_keys=True).encode()).hexdigest()
         if health_key != state.get('last_health'):
             try:
-                telegram('sendMessage', {'chat_id': chat, 'text': '\n'.join(summary)[:3900]}, token)
+                send_formatted_message(chat, coverage_message(config, state, time.time()), token)
                 state['last_health'] = health_key
                 save(state_path, state)
             except RuntimeError as exc:

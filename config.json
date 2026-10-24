@@ -39,20 +39,6 @@
         }
       ]
     },
-    "fnac": {
-      "enabled": false,
-      "reason": "Direct product request returned HTTP 403 on 2026-10-24; inventory API unverified. Do not retry or bypass.",
-      "products": [
-        {
-          "capacity_gb": 256,
-          "url": "https://www.fnac.es/Apple-iPhone-Duo-7-6-256-GB-Blanco-estelar-Telefono-movil/a13483448"
-        },
-        {
-          "capacity_gb": 512,
-          "url": "https://www.fnac.es/Apple-iPhone-Duo-7-6-512-GB-Blanco-estelar-Telefono-movil/a13483450"
-        }
-      ]
-    },
     "amazon": {
       "enabled": true,
       "reason": "Canonical product pages verified with ordinary monitor requests; Amazon retail offers only.",

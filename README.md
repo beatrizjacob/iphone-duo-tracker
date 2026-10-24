@@ -1,6 +1,6 @@
 # iPhone Duo stock tracker
 
-Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring is deployed. The [complete verification run](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123646213) passed all 57 tests, read both requested Amazon variants as unavailable, delivered the updated Telegram coverage report and saved durable state. Fnac and MediaMarkt store pickup have explicit coverage limits below.
+Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring is deployed. The [complete verification run](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123646213) passed all 57 tests, read both requested Amazon variants as unavailable, delivered the updated Telegram coverage report and saved durable state. Fnac and MediaMarkt store pickup are excluded from checks and Telegram reports.
 
 ## Stock-only scope
 
@@ -9,9 +9,8 @@ The tracker checks whether the requested white 256GB or 512GB variant is availab
 | Retailer | Automated stock coverage |
 |---|---|
 | Apple Spain | Enabled: Passeig de Gràcia (R368) and La Maquinista (R406), both capacities |
-| MediaMarkt Spain | Conditional page access; delayed orders do not count as stock. Local pickup is blocked on GitHub, including an ordinary-browser test. |
+| MediaMarkt Spain | Conditional page access; delayed orders do not count as stock. Online checks retained at no extra cost; unsupported pickup excluded. |
 | Amazon Spain | White 256GB and 512GB, sold by Amazon only; local and cloud page layouts verified |
-| Fnac Spain | Disabled: direct HTTP 403 and browser CAPTCHA; no automated stock source verified |
 
 Apple’s separate pickup endpoint returned HTTP 200 in two local tests. The response matched both requested white variants and the two Barcelona stores. The tracker alerts per store and capacity, suppressing unchanged results. Missing or unknown data is not interpreted as out of stock.
 
@@ -93,6 +92,8 @@ The configured schedule is every 10 minutes at minutes 2, 12, 22, 32, 42 and 52 
 
 Ten-minute checks can still miss brief restocks. GitHub's scheduler can be delayed or drop runs under load; **this cannot promise instant alerts**. Scheduled workflows run from the default branch, and GitHub may disable public-repository schedules after 60 days of inactivity. Check the Actions page periodically; state-branch commits are not a guaranteed workaround. See [GitHub scheduled workflow behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
+Telegram messages use bold retailer headings, clear stock labels, spacing and Barcelona local time. Product alerts include a direct product link. Fnac and unsupported MediaMarkt pickup entries are omitted. Working active checks still report access failures or uncertain stock so stale data cannot look current. The first run after this formatting update sends one refreshed report; unchanged routine runs remain quiet.
+
 Only `available` stock results trigger product alerts. Delayed orders never trigger an alert, and there is no delivery-estimate opt-in. Separate notices report meaningful changes in monitoring coverage.
 
 Stock messages deduplicate by product, store/channel and stock result. A confirmed unavailable result re-arms a future stock alert. A network error or unknown result does not re-arm it. Successful notifications are saved after delivery; failed sends are retried on the next eligible run. Coverage notices are sent on meaningful coverage changes, including newly seen unknown stock statuses. Unchanged results remain quiet.
@@ -105,7 +106,7 @@ State is stored on `stock-state`, rather than an expiring Actions cache. Saves n
 - HTTP 429 honors Retry-After (seconds or HTTP date) with at least one hour's cooldown. Other transient failures use exponential backoff up to 24 hours.
 - Responses must stay on the same retailer host. Network timeouts and changed schemas produce no stock claim.
 - If MediaMarkt pauses, leave it paused until permitted access is independently established. Do not repeatedly reset it to defeat protections.
-- Apple pickup is enabled for the two verified Barcelona stores. Fnac still needs a verified automated stock response and adapter. MediaMarkt pickup remains unknown. Generic national availability or pickup labels do not establish local inventory.
+- Apple pickup is enabled for the two verified Barcelona stores. Fnac and unsupported MediaMarkt pickup have been removed from active configuration/reporting. MediaMarkt online checks remain enabled. Generic national availability or pickup labels do not establish local inventory.
 - `postal_code: "08002"` is an explicit central-Barcelona search location, now used by the Apple pickup adapter. It does not represent your home address. Exact configured stores R368/R406 must be returned; changing the search postcode to another region will safely fail validation unless you also verify and update the store configuration.
 
 After permitted access has actually been restored, the circuit breaker can be reset locally against the state branch:
@@ -136,7 +137,7 @@ The fixtures contain reduced, real Apple pickup, MediaMarkt and Amazon responses
 - `telegram_setup.py`: local token-safe private chat ID lookup.
 - `config.json`: product identities and explicit coverage limitations.
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
-- `tests/`: 57 meaningful offline tests, including local Git state recovery.
+- `tests/`: 65 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.
 - `RESEARCH.md`: store-stock findings, alternatives and cloud hosting options.
 - `DOT-TEST.txt`: a one-check request to paste into your Dot conversation.
