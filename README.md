@@ -20,7 +20,7 @@ The stock-only configuration does not need Apple’s shipping endpoint. MediaMar
 
 ## Deployed repository
 
-The requested private repository is [beatrizjacob/iphone-duo-tracker](https://github.com/beatrizjacob/iphone-duo-tracker). The workflow runs hourly at minute 17. Private Actions usage draws from the account's included allowance; this project does not alter billing settings.
+The repository is [beatrizjacob/iphone-duo-tracker](https://github.com/beatrizjacob/iphone-duo-tracker). You approved making it public to keep the ten-minute schedule free on standard GitHub-hosted runners. Code, stock preferences, workflow logs and stock-state history are public; the Telegram bot token and chat ID stay in GitHub Actions secrets. The workflow is configured at minutes 2, 12, 22, 32, 42 and 52 UTC. This project uses no larger runners or paid stock service and does not alter account billing settings.
 
 For private local setup, run `python3 setup_github.py --repo beatrizjacob/iphone-duo-tracker`. The helper asks for the bot token with hidden input, lets you select your own chat, saves both GitHub Actions secrets through the existing GitHub login, and sends a setup message. It does not print the token or store it in a local file. The local `.setup-complete.json` receipt contains only the repository name and completion flags and is ignored by Git.
 
@@ -84,13 +84,13 @@ Under **Settings → Actions → General**, allow this repository's workflows. T
 4. Open the run's **Summary**. Confirm the explicit disabled/unknown sources. A green run with Apple pickup or MediaMarkt observations still means incomplete coverage. A red run with no observations can mean all sources are blocked. Review both the Summary and Telegram message.
 5. Open the `stock-state` branch and inspect `state.json` for pause reasons, next-check timestamps and last observations.
 
-The project is deployed in your private GitHub repository. Parser, notification decisions and state recovery passed 37 tests locally and on GitHub; retailer access also passed on GitHub. The full [deployment run 40120111752](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40120111752) passed: Telegram accepted its initial coverage report and the stock-state branch was saved. The hourly workflow is active. Expected cooldown skips remain quiet and count as successful runs.
+The project is deployed in your GitHub repository. Parser, notification decisions and state recovery passed 37 tests locally and on GitHub; retailer access also passed on GitHub. The full [deployment run 40120111752](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40120111752) passed: Telegram accepted its initial coverage report and the stock-state branch was saved. The monitoring workflow is active. Expected cooldown skips remain quiet and count as successful runs.
 
 ## Schedule and notification behavior
 
-The schedule is once per hour at minute 17 UTC, with one shared concurrency group. It makes at most one robots request plus one data request per eligible retailer: one batched Apple pickup request and one MediaMarkt category request, with a minimum 10-second gap and the site's larger Crawl-delay if present. Local manual runs still honor a 60-minute minimum interval in persistent state. Do not lower the interval to work around blocks.
+The configured schedule is every 10 minutes at minutes 2, 12, 22, 32, 42 and 52 UTC, with one shared concurrency group. It makes at most one robots request plus one data request per eligible retailer: one batched Apple pickup request and one MediaMarkt category request, with a minimum 10-second gap and the site's larger Crawl-delay if present. A 5-minute minimum interval in persistent state prevents rapid repeat checks while allowing scheduled jobs to tolerate runner timing variations. Existing hourly success deadlines migrate to the new interval; retailer rate-limit and access-block backoffs are preserved. Do not lower the interval to work around blocks.
 
-Hourly checks can miss brief restocks. GitHub's scheduler can be delayed or drop runs under load; **this cannot promise instant alerts**. Scheduled workflows run from the default branch, and GitHub may disable public-repository schedules after 60 days of inactivity. Check the Actions page periodically; state-branch commits are not a guaranteed workaround. See [GitHub scheduled workflow behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+Ten-minute checks can still miss brief restocks. GitHub's scheduler can be delayed or drop runs under load; **this cannot promise instant alerts**. Scheduled workflows run from the default branch, and GitHub may disable public-repository schedules after 60 days of inactivity. Check the Actions page periodically; state-branch commits are not a guaranteed workaround. See [GitHub scheduled workflow behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
 Only `available` stock results trigger product alerts. Delayed orders never trigger an alert, and there is no delivery-estimate opt-in. Separate notices report meaningful changes in monitoring coverage.
 
@@ -135,5 +135,5 @@ The fixtures contain reduced, real Apple pickup and MediaMarkt responses capture
 - `telegram_setup.py`: local token-safe private chat ID lookup.
 - `config.json`: product identities and explicit coverage limitations.
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
-- `tests/`: 37 meaningful offline tests, including local Git state recovery.
+- `tests/`: 40 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.

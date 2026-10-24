@@ -1,5 +1,5 @@
 {
-  "interval_seconds": 3600,
+  "interval_seconds": 300,
   "region": "Barcelona",
   "postal_code": "08002",
   "sources": {

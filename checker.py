@@ -219,6 +219,16 @@ def save(path, state):
     temp.write_text(json.dumps(state, indent=2, ensure_ascii=False) + '\n')
     temp.replace(path)
 
+def reconcile_poll_interval(slot, interval):
+    """Migrate a normal successful poll deadline, preserving all error backoffs."""
+    previous = slot.get('poll_interval_seconds', 3600)  # Original deployed interval.
+    if (slot.get('next_check') and previous != interval and not slot.get('paused')
+            and not slot.get('failures', 0)):
+        last_success = slot.get('last_success_at', slot['next_check'] - previous)
+        slot['next_check'] = last_success + interval
+        slot['poll_interval_seconds'] = interval
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', default='config.json')
@@ -258,6 +268,7 @@ def main():
         slot = state['sources'].setdefault(name, {})
         if not source['enabled']:
             failures.append(f"{name}: disabled — {source['reason']}"); continue
+        reconcile_poll_interval(slot, config['interval_seconds'])
         if not offline and (slot.get('paused') or slot.get('next_check', 0) > now):
             failures.append(f'{name}: paused/cooling down; see state branch'); continue
         try:
@@ -282,7 +293,8 @@ def main():
                 observations.extend(mm_observations(data, source['products']))
             else:
                 raise StopSource('No verified working inventory adapter', permanent=True)
-            slot.update(failures=0, next_check=now + config['interval_seconds'])
+            slot.update(failures=0, next_check=now + config['interval_seconds'],
+                        last_success_at=now, poll_interval_seconds=config['interval_seconds'])
         except (StopSource, ValueError, KeyError, TypeError, AttributeError) as exc:
             if isinstance(exc, StopSource):
                 reason, pause, delay = exc.reason, exc.permanent, exc.delay

@@ -1,7 +1,7 @@
 name: iPhone stock monitor
 on:
   schedule:
-    - cron: '17 * * * *'
+    - cron: '2,12,22,32,42,52 * * * *'
   workflow_dispatch:
     inputs:
       test_telegram:

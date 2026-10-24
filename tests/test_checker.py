@@ -138,6 +138,21 @@ class AccessTests(unittest.TestCase):
             with self.assertRaises(RuntimeError) as ctx: c.telegram('sendMessage',{},'secret-token')
             self.assertNotIn('secret-token',str(ctx.exception))
 
+class IntervalTests(unittest.TestCase):
+    def test_old_successful_hourly_deadline_uses_new_interval(self):
+        slot={'next_check':4600,'failures':0}
+        c.reconcile_poll_interval(slot,300)
+        self.assertEqual(slot['next_check'],1300)
+    def test_rate_limit_backoff_is_never_shortened(self):
+        slot={'next_check':4600,'failures':1,'reason':'HTTP 429'}
+        c.reconcile_poll_interval(slot,300)
+        self.assertEqual(slot['next_check'],4600)
+    def test_access_block_is_never_reset(self):
+        slot={'next_check':4600,'failures':0,'paused':True}
+        c.reconcile_poll_interval(slot,300)
+        self.assertEqual(slot['next_check'],4600)
+        self.assertTrue(slot['paused'])
+
 class StateIntegrationTests(unittest.TestCase):
     def test_state_branch_roundtrip_preserves_source(self):
         helper = str(Path('state_git.py').resolve())
@@ -196,7 +211,7 @@ class RunIntegrationTests(unittest.TestCase):
             config,state=self.setup_files(Path(directory)); sender=Mock(return_value={})
             self.assertEqual(self.run_monitor(config,state,sender,1792843200),0)
             self.assertEqual(sender.call_count,2)
-            self.assertEqual(self.run_monitor(config,state,sender,1792843800),0)
+            self.assertEqual(self.run_monitor(config,state,sender,1792843300),0)
             self.assertEqual(sender.call_count,2)
     def test_failed_telegram_not_marked_delivered_then_retried(self):
         from unittest.mock import Mock
