@@ -95,3 +95,14 @@ Direct robots access returned 403 even though the page reader could display its 
 ## Ten-minute public deployment
 
 The user approved changing this repository to public so the standard GitHub-hosted runner schedule can remain free. The prepared schedule runs at minutes 2, 12, 22, 32, 42 and 52 UTC, with a five-minute minimum polling interval to tolerate scheduling jitter. Successful hourly deadlines migrate automatically; all error cooldowns and paused-source controls remain intact. All 40 local tests passed. Historical references to private/hourly deployment above describe the earlier setup.
+
+
+## Amazon and store-access follow-up (24 October 2026)
+
+- Amazon canonical ASINs verified: B0HJ9QGJJJ = white 256GB; B0HJB52JYX = white 512GB. The supplied link's text and referral metadata disagree; the selected product identity is authoritative.
+- Local ordinary StockWatch requests returned HTTP 200, correct title/ASIN and an Amazon retail backorder offer explicitly marked temporarily out of stock. Purchase buttons are not interpreted as stock.
+- [GitHub diagnostic run 40123215105](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123215105) returned correct identities and separate `outOfStock` panels with no selected merchant. Both negative layouts are supported. Positive stock behavior remains synthetic-test coverage; no live positive stock was observed.
+- MediaMarkt's normal browser store selector exposed Barcelona store-specific future collection wording for white 256GB, but an observed-query direct read returned HTTP 403. [Ordinary Chrome on GitHub also returned HTTP 403](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123022491) before reaching store selection. Pickup monitoring remains unknown. The checker does not repeat the blocked inventory request.
+- Fnac automation remains disabled after HTTP 403 / DataDome challenge. Its official app documents manual store-stock lookup. A working API or browser monitor has not been established.
+- 57 offline tests cover both Amazon negative layouts, conservative positive stock decisions, product/seller identity, circuit breakers, failure isolation, deduplication and persistent state.
+- Detailed evidence, alternatives and cloud-hosting tradeoffs are in [RESEARCH.md](RESEARCH.md). Dot and Oracle have not been configured; [DOT-TEST.txt](DOT-TEST.txt) is a manual one-check access test request.

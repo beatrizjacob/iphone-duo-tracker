@@ -50,7 +50,8 @@ def fetch(url):
             if len(body) > 3_000_000:
                 raise StopSource('Response exceeds 3MB safety limit')
             text = body.decode('utf-8', errors='strict')
-            if re.search(r'<title[^>]*>[^<]*(?:access denied|captcha|just a moment)|cf-chl-|verify you are human', text, re.I):
+            if re.search(r'<title[^>]*>[^<]*(?:access denied|captcha|just a moment|robot check)|'
+                         r'<form[^>]+action=["\'][^"\']*validateCaptcha|cf-chl-|verify you are human', text, re.I):
                 raise StopSource('Access challenge detected; manual review required', permanent=True)
             return text
     except urllib.error.HTTPError as exc:

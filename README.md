@@ -136,7 +136,7 @@ The fixtures contain reduced, real Apple pickup, MediaMarkt and Amazon responses
 - `telegram_setup.py`: local token-safe private chat ID lookup.
 - `config.json`: product identities and explicit coverage limitations.
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
-- `tests/`: 56 meaningful offline tests, including local Git state recovery.
+- `tests/`: 57 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.
 
 ## Additional retailer research

@@ -200,6 +200,16 @@ class AccessTests(unittest.TestCase):
             with self.assertRaises(c.StopSource) as ctx: c.fetch('https://www.apple.com/es/')
             self.assertEqual(ctx.exception.delay,7200)
             self.assertEqual(request.call_count,1)
+    def test_http_200_robot_check_pauses_without_parser_or_retry(self):
+        from unittest.mock import MagicMock
+        for html in ['<title>Amazon Robot Check</title>',
+                     '<form action="/errors/validateCaptcha"><input></form>']:
+            response=MagicMock()
+            response.__enter__.return_value.read.return_value=html.encode()
+            with patch.object(c.OPENER,'open',return_value=response) as request:
+                with self.assertRaises(c.StopSource) as ctx:c.fetch('https://www.amazon.es/dp/B0HJ9QGJJJ')
+                self.assertTrue(ctx.exception.permanent)
+                self.assertEqual(request.call_count,1)
     def test_allowlist(self):
         with self.assertRaises(c.StopSource):c.fetch('https://attacker.example/')
     def test_token_redacted(self):
