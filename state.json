@@ -3,17 +3,23 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1792866784.0806112,
+      "next_check": 1792868997.0486064,
       "poll_interval_seconds": 300,
-      "last_success_at": 1792866484.0806112
+      "last_success_at": 1792868697.0486064
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1792866784.0806112,
+      "next_check": 1792868997.0486064,
       "poll_interval_seconds": 300,
-      "last_success_at": 1792866484.0806112
+      "last_success_at": 1792868697.0486064
     },
-    "fnac": {}
+    "fnac": {},
+    "amazon": {
+      "failures": 0,
+      "next_check": 1792868997.0486064,
+      "last_success_at": 1792868697.0486064,
+      "poll_interval_seconds": 300
+    }
   },
   "items": {
     "apple:MK2D4QL/A:pickup:R368": {
@@ -121,8 +127,32 @@
         "scope": "Barcelona store inventory endpoint not verified",
         "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
       }
+    },
+    "amazon:B0HJ9QGJJJ:online_stock": {
+      "observed": {
+        "key": "amazon:B0HJ9QGJJJ:online_stock",
+        "retailer": "Amazon Spain",
+        "capacity_gb": 256,
+        "channel": "online_stock",
+        "status": "unavailable",
+        "raw_status": "No disponible por el momento. No sabemos cuándo este producto volverá a estar en stock.",
+        "scope": "Sold by Amazon; Spain product-page stock, Barcelona checkout eligibility unverified",
+        "url": "https://www.amazon.es/dp/B0HJ9QGJJJ"
+      }
+    },
+    "amazon:B0HJB52JYX:online_stock": {
+      "observed": {
+        "key": "amazon:B0HJB52JYX:online_stock",
+        "retailer": "Amazon Spain",
+        "capacity_gb": 512,
+        "channel": "online_stock",
+        "status": "unavailable",
+        "raw_status": "No disponible por el momento. No sabemos cuándo este producto volverá a estar en stock.",
+        "scope": "Sold by Amazon; Spain product-page stock, Barcelona checkout eligibility unverified",
+        "url": "https://www.amazon.es/dp/B0HJB52JYX"
+      }
     }
   },
-  "last_run_utc": "2026-10-24T18:28:30.812015+00:00",
-  "last_health": "f00ec2c51a394d57bb9caf5c89eb7677672d6a1ac146b6b78e4a225cb23e2b7c"
+  "last_run_utc": "2026-10-24T19:05:43.590741+00:00",
+  "last_health": "41224465503a438ada4907401dff3651cbc3dae7cdb0a8fa3b053aefd8bf3592"
 }
