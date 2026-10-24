@@ -3,21 +3,20 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1792868997.0486064,
+      "next_check": 1792869891.8994918,
       "poll_interval_seconds": 300,
-      "last_success_at": 1792868697.0486064
+      "last_success_at": 1792869591.8994918
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1792868997.0486064,
+      "next_check": 1792869891.8994918,
       "poll_interval_seconds": 300,
-      "last_success_at": 1792868697.0486064
+      "last_success_at": 1792869591.8994918
     },
-    "fnac": {},
     "amazon": {
       "failures": 0,
-      "next_check": 1792868997.0486064,
-      "last_success_at": 1792868697.0486064,
+      "next_check": 1792869891.8994918,
+      "last_success_at": 1792869591.8994918,
       "poll_interval_seconds": 300
     }
   },
@@ -94,17 +93,6 @@
         "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-256-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674375.html"
       }
     },
-    "mediamarkt:1674375:pickup": {
-      "observed": {
-        "key": "mediamarkt:1674375:pickup",
-        "retailer": "MediaMarkt Spain",
-        "capacity_gb": 256,
-        "channel": "pickup",
-        "status": "unknown",
-        "scope": "Barcelona store inventory endpoint not verified",
-        "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-256-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674375.html"
-      }
-    },
     "mediamarkt:1674377:online_stock": {
       "observed": {
         "key": "mediamarkt:1674377:online_stock",
@@ -114,17 +102,6 @@
         "status": "unavailable",
         "raw_status": "NOT_AVAILABLE",
         "scope": "Spain-wide page; Barcelona postcode eligibility unverified",
-        "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
-      }
-    },
-    "mediamarkt:1674377:pickup": {
-      "observed": {
-        "key": "mediamarkt:1674377:pickup",
-        "retailer": "MediaMarkt Spain",
-        "capacity_gb": 512,
-        "channel": "pickup",
-        "status": "unknown",
-        "scope": "Barcelona store inventory endpoint not verified",
         "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
       }
     },
@@ -153,6 +130,6 @@
       }
     }
   },
-  "last_run_utc": "2026-10-24T19:05:43.590741+00:00",
-  "last_health": "41224465503a438ada4907401dff3651cbc3dae7cdb0a8fa3b053aefd8bf3592"
+  "last_run_utc": "2026-10-24T19:20:38.807397+00:00",
+  "last_health": "9ee37b282b80d15461cedba0fd0b5b5c25ac2d0b713e306e95bf3cc16603d5e9"
 }
