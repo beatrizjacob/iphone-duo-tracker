@@ -1,6 +1,6 @@
 # iPhone Duo stock tracker
 
-Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring has been added and both requested variants returned readable product identities and explicit no-offer messages from GitHub. Fnac and MediaMarkt store pickup have explicit coverage limits below.
+Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring is deployed. The [complete verification run](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123646213) passed all 57 tests, read both requested Amazon variants as unavailable, delivered the updated Telegram coverage report and saved durable state. Fnac and MediaMarkt store pickup have explicit coverage limits below.
 
 ## Stock-only scope
 
@@ -138,6 +138,8 @@ The fixtures contain reduced, real Apple pickup, MediaMarkt and Amazon responses
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
 - `tests/`: 57 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.
+- `RESEARCH.md`: store-stock findings, alternatives and cloud hosting options.
+- `DOT-TEST.txt`: a one-check request to paste into your Dot conversation.
 
 ## Additional retailer research
 

@@ -106,3 +106,5 @@ The user approved changing this repository to public so the standard GitHub-host
 - Fnac automation remains disabled after HTTP 403 / DataDome challenge. Its official app documents manual store-stock lookup. A working API or browser monitor has not been established.
 - 57 offline tests cover both Amazon negative layouts, conservative positive stock decisions, product/seller identity, circuit breakers, failure isolation, deduplication and persistent state.
 - Detailed evidence, alternatives and cloud-hosting tradeoffs are in [RESEARCH.md](RESEARCH.md). Dot and Oracle have not been configured; [DOT-TEST.txt](DOT-TEST.txt) is a manual one-check access test request.
+
+The complete [deployment run 40123646213](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40123646213) passed all 57 tests and the stock check. Amazon returned unavailable for both capacities; its saved source state has zero failures and the two observations are present on `stock-state`. The updated Telegram coverage report was accepted and its deduplication fingerprint was saved. The ten-minute workflow schedule is unchanged.
