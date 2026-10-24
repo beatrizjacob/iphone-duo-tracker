@@ -52,6 +52,23 @@
           "url": "https://www.fnac.es/Apple-iPhone-Duo-7-6-512-GB-Blanco-estelar-Telefono-movil/a13483450"
         }
       ]
+    },
+    "amazon": {
+      "enabled": true,
+      "reason": "Canonical product pages verified with ordinary monitor requests; Amazon retail offers only.",
+      "merchant_id": "A1AT7YVPFBWXBL",
+      "products": [
+        {
+          "asin": "B0HJ9QGJJJ",
+          "capacity_gb": 256,
+          "url": "https://www.amazon.es/dp/B0HJ9QGJJJ"
+        },
+        {
+          "asin": "B0HJB52JYX",
+          "capacity_gb": 512,
+          "url": "https://www.amazon.es/dp/B0HJB52JYX"
+        }
+      ]
     }
   }
 }

@@ -1,6 +1,6 @@
-# iPhone Duo stock tracker — Apple pickup verified
+# iPhone Duo stock tracker
 
-**Updated after further research on 24 October 2026. Apple pickup now works in direct, unauthenticated tests from this computer.** The earlier disabled-Apple conclusion was incomplete: a separate pickup endpoint works even though the combined fulfillment endpoint returned HTTP 541. The tracker now enables this verified pickup adapter. This is still incomplete three-retailer coverage, and GitHub-hosted access must be tested separately.
+Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring has been added; cloud access is being verified. Fnac and MediaMarkt store pickup have explicit coverage limits below.
 
 ## Stock-only scope
 
@@ -10,6 +10,7 @@ The tracker checks whether the requested white 256GB or 512GB variant is availab
 |---|---|
 | Apple Spain | Enabled: Passeig de Gràcia (R368) and La Maquinista (R406), both capacities |
 | MediaMarkt Spain | Conditional page access; delayed orders do not count as stock. Local pickup remains unverified. |
+| Amazon Spain | White 256GB and 512GB, sold by Amazon only; live GitHub access verification pending |
 | Fnac Spain | Disabled: direct HTTP 403 and browser CAPTCHA; no automated stock source verified |
 
 Apple’s separate pickup endpoint returned HTTP 200 in two local tests. The response matched both requested white variants and the two Barcelona stores. The tracker alerts per store and capacity, suppressing unchanged results. Missing or unknown data is not interpreted as out of stock.
@@ -84,11 +85,11 @@ Under **Settings → Actions → General**, allow this repository's workflows. T
 4. Open the run's **Summary**. Confirm the explicit disabled/unknown sources. A green run with Apple pickup or MediaMarkt observations still means incomplete coverage. A red run with no observations can mean all sources are blocked. Review both the Summary and Telegram message.
 5. Open the `stock-state` branch and inspect `state.json` for pause reasons, next-check timestamps and last observations.
 
-The project is deployed in your GitHub repository. Parser, notification decisions and state recovery passed 37 tests locally and on GitHub; retailer access also passed on GitHub. The full [deployment run 40120111752](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40120111752) passed: Telegram accepted its initial coverage report and the stock-state branch was saved. The monitoring workflow is active. Expected cooldown skips remain quiet and count as successful runs.
+The project is deployed in your GitHub repository. Parser, notification decisions and state recovery passed the original deployment tests locally and on GitHub; retailer access also passed on GitHub. The full [deployment run 40120111752](https://github.com/beatrizjacob/iphone-duo-tracker/actions/runs/40120111752) passed: Telegram accepted its initial coverage report and the stock-state branch was saved. The monitoring workflow is active. Expected cooldown skips remain quiet and count as successful runs.
 
 ## Schedule and notification behavior
 
-The configured schedule is every 10 minutes at minutes 2, 12, 22, 32, 42 and 52 UTC, with one shared concurrency group. It makes at most one robots request plus one data request per eligible retailer: one batched Apple pickup request and one MediaMarkt category request, with a minimum 10-second gap and the site's larger Crawl-delay if present. A 5-minute minimum interval in persistent state prevents rapid repeat checks while allowing scheduled jobs to tolerate runner timing variations. Existing hourly success deadlines migrate to the new interval; retailer rate-limit and access-block backoffs are preserved. Do not lower the interval to work around blocks.
+The configured schedule is every 10 minutes at minutes 2, 12, 22, 32, 42 and 52 UTC, with one shared concurrency group. It makes one robots request plus one data request for Apple and MediaMarkt, and two such pairs for the two Amazon product pages (no offer-listing or private availability endpoints), with a minimum 10-second gap and the site's larger Crawl-delay if present. A 5-minute minimum interval in persistent state prevents rapid repeat checks while allowing scheduled jobs to tolerate runner timing variations. Existing hourly success deadlines migrate to the new interval; retailer rate-limit and access-block backoffs are preserved. Do not lower the interval to work around blocks.
 
 Ten-minute checks can still miss brief restocks. GitHub's scheduler can be delayed or drop runs under load; **this cannot promise instant alerts**. Scheduled workflows run from the default branch, and GitHub may disable public-repository schedules after 60 days of inactivity. Check the Actions page periodically; state-branch commits are not a guaranteed workaround. See [GitHub scheduled workflow behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
@@ -121,10 +122,10 @@ These commands require a local authenticated clone with write access. Wait until
 
 ```sh
 python3 -m unittest discover -s tests -v
-python3 checker.py --fixture tests/fixtures/mediamarkt.json --apple-fixture tests/fixtures/apple-pickup.json
+python3 checker.py --fixture tests/fixtures/mediamarkt.json --apple-fixture tests/fixtures/apple-pickup.json --amazon-fixture tests/fixtures/amazon
 ```
 
-The fixtures contain reduced, real Apple pickup and MediaMarkt responses captured on 24 October 2026. Apple-only offline inspection is available with `--apple-fixture tests/fixtures/apple-pickup.json`. The MediaMarkt evidence will eventually expire and then correctly report stock as unknown; the test freezes time to validate its original meaning. All positive immediate-stock events used in tests are synthetic and are never represented as verified retailer observations.
+The fixtures contain reduced, real Apple pickup, MediaMarkt and Amazon responses captured on 24 October 2026. Apple-only offline inspection is available with `--apple-fixture tests/fixtures/apple-pickup.json`. The MediaMarkt evidence will eventually expire and then correctly report stock as unknown; the test freezes time to validate its original meaning. All positive immediate-stock events used in tests are synthetic and are never represented as verified retailer observations.
 
 `python3 checker.py --dry-run` makes live retailer requests subject to the same rules, but does not send Telegram messages or persist state. Repeated dry runs do not have persistent cooldown protection; do not use them for polling or to retry a blocked source.
 
@@ -135,5 +136,9 @@ The fixtures contain reduced, real Apple pickup and MediaMarkt responses capture
 - `telegram_setup.py`: local token-safe private chat ID lookup.
 - `config.json`: product identities and explicit coverage limitations.
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
-- `tests/`: 40 meaningful offline tests, including local Git state recovery.
+- `tests/`: 50 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.
+
+## Additional retailer research
+
+See [RESEARCH.md](RESEARCH.md) for verified Amazon variant IDs, MediaMarkt store-selector findings and Fnac alternatives. `Manual store-browser research` is an unscheduled, read-only feasibility test; it uses ordinary Chromium and stops at access protections. It is not a stock source and has no Telegram credentials.

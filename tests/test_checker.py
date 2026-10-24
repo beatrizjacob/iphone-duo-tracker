@@ -112,6 +112,54 @@ class AlertTests(unittest.TestCase):
         self.item['earliest']='synthetic-new-date'
         self.assertFalse(c.should_alert(self.item,previous))
 
+class AmazonTests(unittest.TestCase):
+    def setUp(self):
+        self.source=json.loads(Path('config.json').read_text())['sources']['amazon']
+        self.product=self.source['products'][0]
+        self.html=Path('tests/fixtures/amazon/B0HJ9QGJJJ.html').read_text()
+    def observe(self):
+        return c.amazon_observation(self.html,self.product,self.source['merchant_id'])
+    def test_real_backorder_with_cart_button_is_unavailable(self):
+        for product in self.source['products']:
+            html=Path(f"tests/fixtures/amazon/{product['asin']}.html").read_text()
+            self.assertEqual(c.amazon_observation(html,product,self.source['merchant_id'])['status'],'unavailable')
+    def test_synthetic_stock_alert_and_dedup(self):
+        # Positive stock wording is synthetic, not a live in-stock observation.
+        self.html=self.html.replace('Temporalmente sin stock.', 'En stock.')
+        item=self.observe()
+        self.assertEqual(item['status'],'available')
+        self.assertTrue(c.should_alert(item,{}))
+        self.assertFalse(c.should_alert(item,{'last_alert':c.fingerprint(item)}))
+    def test_unknown_wording_stays_unknown(self):
+        self.html=self.html.replace('Temporalmente sin stock.', 'Consultar disponibilidad.')
+        self.assertEqual(self.observe()['status'],'unknown')
+    def test_future_stock_never_alerts(self):
+        self.html=self.html.replace('Temporalmente sin stock.', 'Disponible a partir del 1 de diciembre.')
+        self.assertEqual(self.observe()['status'],'unavailable')
+    def test_conflicting_stock_wording_never_alerts(self):
+        self.html=self.html.replace('Temporalmente sin stock.', 'En stock. Temporalmente sin stock.')
+        self.assertEqual(self.observe()['status'],'unavailable')
+    def test_missing_availability_is_unknown(self):
+        self.html=self.html.replace('id="availability"','id="other"')
+        self.assertEqual(self.observe()['status'],'unknown')
+    def test_other_seller_is_unknown(self):
+        self.html=self.html.replace('A1AT7YVPFBWXBL','other-seller')
+        self.assertEqual(self.observe()['status'],'unknown')
+    def test_wrong_asin_capacity_and_color_are_rejected(self):
+        for original,new in [('B0HJ9QGJJJ','B0HJB52JYX'),('256 GB','512 GB'),('Blanco Estelar','Azul')]:
+            with self.subTest(field=original):
+                html=self.html.replace(original,new)
+                with self.assertRaises(c.StopSource):
+                    c.amazon_observation(html,self.product,self.source['merchant_id'])
+    def test_duplicate_conflicting_fields_do_not_create_stock(self):
+        self.html=self.html.replace('Temporalmente sin stock.', 'En stock.')
+        self.html+='<div id="availability">Temporalmente sin stock.</div>'
+        self.assertEqual(self.observe()['status'],'unknown')
+    def test_robots_disallows_special_availability_api(self):
+        rules='User-agent: *\nDisallow: /dp/product-availability/\n'
+        self.assertTrue(c.robots_rules(rules,'/dp/B0HJ9QGJJJ')[0])
+        self.assertFalse(c.robots_rules(rules,'/dp/product-availability/test')[0])
+
 class AccessTests(unittest.TestCase):
     def test_robots_wildcards_and_allow(self):
         rules='User-agent: *\nDisallow: /es/*\nAllow: /es/brand/\nCrawl-delay: 15\n'
@@ -180,6 +228,8 @@ class RunIntegrationTests(unittest.TestCase):
         html = '<script>{"apolloState":' + FIXTURE.read_text() + '}</script>'
         def fetch(url):
             if url.endswith('/robots.txt'): return 'User-agent: *\nAllow: /\n'
+            if url.startswith('https://www.amazon.es/dp/'):
+                return Path(f"tests/fixtures/amazon/{url.rsplit('/',1)[-1]}.html").read_text()
             if 'pickup-message' in url:
                 payload=json.loads(Path('tests/fixtures/apple-pickup.json').read_text())
                 # Synthetic in-stock event to verify send/dedup/failure behavior.

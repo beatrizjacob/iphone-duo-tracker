@@ -11,10 +11,11 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from html.parser import HTMLParser
 from pathlib import Path
 
 UA = 'StockWatch/1.0 (personal low-frequency product availability monitor)'
-HOSTS = {'www.apple.com', 'www.mediamarkt.es', 'www.fnac.es'}
+HOSTS = {'www.apple.com', 'www.mediamarkt.es', 'www.fnac.es', 'www.amazon.es'}
 
 class StopSource(Exception):
     def __init__(self, reason, delay=3600, permanent=False):
@@ -170,6 +171,72 @@ def apple_observations(payload, source, postal_code):
                 'scope': f'Apple {store_name}, Barcelona ({store_id})', 'url': product['url']})
     return results
 
+class AmazonProductHTML(HTMLParser):
+    """Read selected-offer fields only; never treat cart buttons as stock."""
+    VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+            'link', 'meta', 'param', 'source', 'track', 'wbr'}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack, self.fields, self.inputs = [], {}, {}
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        target = attrs.get('id') if attrs.get('id') in ('productTitle', 'availability') else None
+        if tag == 'input' and attrs.get('id') in ('ASIN', 'merchantID'):
+            self.inputs.setdefault(attrs['id'], set()).add(attrs.get('value', ''))
+        if target:
+            self.fields.setdefault(target, []).append([])
+        if tag not in self.VOID:
+            self.stack.append((tag, target))
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in self.VOID:
+            self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag:
+                del self.stack[i:]
+                break
+
+    def handle_data(self, data):
+        if any(tag in ('script', 'style') for tag, _ in self.stack):
+            return
+        for _, target in self.stack:
+            if target:
+                self.fields[target][-1].append(data)
+
+    def field(self, name):
+        values = {' '.join(' '.join(parts).split()) for parts in self.fields.get(name, [])}
+        return values.pop() if len(values) == 1 else ''
+
+
+def amazon_observation(html, product, merchant_id):
+    page = AmazonProductHTML()
+    page.feed(html)
+    asin = product['asin']
+    title = page.field('productTitle').lower()
+    if (page.inputs.get('ASIN') != {asin} or not all(term in title for term in
+            ('apple iphone duo', f"{product['capacity_gb']} gb", 'blanco estelar'))):
+        raise StopSource(f'Amazon product identity mismatch for {asin}; no stock conclusion')
+    quote = page.field('availability')
+    normalized = quote.lower().strip()
+    # Negative/future wording wins, including when the page accepts backorders.
+    negative = re.search(r'sin stock|no disponible|no est[aá] disponible|agotad[oa]|'
+                         r'out of stock|unavailable|disponible (?:a partir|el )|'
+                         r'preventa|reserva|pre[- ]?order|temporarily', normalized)
+    positive = re.match(r'^(?:en stock\b|in stock\b|solo quedan? \d+\b)', normalized)
+    status = 'unavailable' if negative else 'available' if positive else 'unknown'
+    if page.inputs.get('merchantID') != {merchant_id}:
+        status = 'unknown'
+    return {'key': f'amazon:{asin}:online_stock', 'retailer': 'Amazon Spain',
+            'capacity_gb': product['capacity_gb'], 'channel': 'online_stock',
+            'status': status, 'raw_status': quote or 'Missing/ambiguous availability text',
+            'scope': 'Sold by Amazon; Spain product-page stock, Barcelona checkout eligibility unverified',
+            'url': product['url']}
+
 def checked_fetch(url, interval):
     """One robots check, then one public data request, with no protection bypass."""
     parts = urllib.parse.urlsplit(url)
@@ -236,8 +303,9 @@ def main():
     parser.add_argument('--dry-run', action='store_true', help='No Telegram or state writes; still performs retailer requests')
     parser.add_argument('--fixture', help='Offline MediaMarkt JSON, no network or Telegram')
     parser.add_argument('--apple-fixture', help='Offline Apple pickup JSON, no network or Telegram')
+    parser.add_argument('--amazon-fixture', help='Directory of offline ASIN.html fixtures, no network or Telegram')
     parser.add_argument('--test-telegram', action='store_true')
-    parser.add_argument('--reset-source', choices=['apple', 'mediamarkt', 'fnac'])
+    parser.add_argument('--reset-source', choices=['apple', 'mediamarkt', 'fnac', 'amazon'])
     args = parser.parse_args()
     token, chat = os.getenv('TELEGRAM_BOT_TOKEN'), os.getenv('TELEGRAM_CHAT_ID')
     if args.test_telegram:
@@ -259,7 +327,7 @@ def main():
         state['sources'].pop(args.reset_source, None)
         if not args.dry_run: save(state_path, state)
         print('Source circuit breaker reset; config enabled flag still applies'); return 0
-    offline = bool(args.fixture or args.apple_fixture)
+    offline = bool(args.fixture or args.apple_fixture or args.amazon_fixture)
     if not args.dry_run and not offline and (not token or not chat):
         raise SystemExit('Telegram secrets missing; use --dry-run for verification')
     observations, failures = [], []
@@ -291,6 +359,17 @@ def main():
                 else:
                     data = extract_mm(checked_fetch(source['url'], config['interval_seconds']))
                 observations.extend(mm_observations(data, source['products']))
+            elif name == 'amazon':
+                if offline and not args.amazon_fixture:
+                    failures.append('amazon: skipped; no Amazon offline fixtures supplied'); continue
+                items = []
+                for product in source['products']:
+                    if offline:
+                        html = (Path(args.amazon_fixture) / f"{product['asin']}.html").read_text()
+                    else:
+                        html = checked_fetch(product['url'], config['interval_seconds'])
+                    items.append(amazon_observation(html, product, source['merchant_id']))
+                observations.extend(items)
             else:
                 raise StopSource('No verified working inventory adapter', permanent=True)
             slot.update(failures=0, next_check=now + config['interval_seconds'],
