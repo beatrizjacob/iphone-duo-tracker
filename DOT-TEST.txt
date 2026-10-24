@@ -1,0 +1,12 @@
+Use your own cloud computer to test whether you can monitor iPhone Duo stock without my Mac being on.
+
+Read the verified product links and limitations here:
+https://github.com/beatrizjacob/iphone-duo-tracker/blob/main/RESEARCH.md
+
+My choices: white 256GB or 512GB, Barcelona store pickup or immediate online stock. Investigate Fnac Spain and MediaMarkt Spain store pickup. The existing GitHub tracker already handles Apple pickup, MediaMarkt online checks and Amazon; preserve it.
+
+First perform one normal-browser access test. Check the exact selected capacity/colour, named Barcelona store and its product-specific stock wording. Future collection after transfer to a store is not immediate stock. Missing information or an access error means unknown.
+
+Stop on CAPTCHA, HTTP 403/429 or other access protections. Respect robots and retailer limits. Do not use proxies, stealth, fingerprint spoofing, challenge cookies or my local computer as a hidden fallback. Do not make purchases.
+
+If access works, report the evidence and whether a saved ten-minute cloud schedule fits my current plan allowance. Check what secure Telegram credential storage is available; do not ask me to paste a token into the chat or public files. Do not assume an unattended background process persists just because the computer preserves files. Propose a tested setup before activating recurring checks.

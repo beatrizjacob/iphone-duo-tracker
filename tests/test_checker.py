@@ -160,6 +160,22 @@ class AmazonTests(unittest.TestCase):
         self.html=self.html.replace('Temporalmente sin stock.', 'En stock.')
         self.html+='<div id="availability">Temporalmente sin stock.</div>'
         self.assertEqual(self.observe()['status'],'unknown')
+    def test_empty_duplicate_component_does_not_hide_real_status(self):
+        self.html+='<div id="availability"></div>'
+        self.assertEqual(self.observe()['status'],'unavailable')
+    def test_real_cloud_no_offer_panel_is_unavailable(self):
+        for product in self.source['products']:
+            html=Path(f"tests/fixtures/amazon-cloud/{product['asin']}.html").read_text()
+            item=c.amazon_observation(html,product,self.source['merchant_id'])
+            self.assertEqual(item['status'],'unavailable')
+            self.assertNotIn('Lista de deseos',item['raw_status'])
+    def test_missing_merchant_cannot_create_positive_stock(self):
+        self.html=self.html.replace('A1AT7YVPFBWXBL','').replace('Temporalmente sin stock.','En stock.')
+        self.assertEqual(self.observe()['status'],'unknown')
+    def test_conflicting_positive_and_no_offer_panels_stay_unknown(self):
+        self.html=self.html.replace('Temporalmente sin stock.','En stock.')
+        self.html+='<div id="outOfStock">No disponible por el momento.</div>'
+        self.assertEqual(self.observe()['status'],'unknown')
     def test_robots_disallows_special_availability_api(self):
         rules='User-agent: *\nDisallow: /dp/product-availability/\n'
         self.assertTrue(c.robots_rules(rules,'/dp/B0HJ9QGJJJ')[0])
@@ -229,11 +245,13 @@ class StateIntegrationTests(unittest.TestCase):
             self.assertEqual(git('ls-tree','--name-only','FETCH_HEAD').stdout.strip(),'state.json')
 
 class RunIntegrationTests(unittest.TestCase):
-    def run_monitor(self, config, state, sender, now):
+    def run_monitor(self, config, state, sender, now, block_amazon=False):
         html = '<script>{"apolloState":' + FIXTURE.read_text() + '}</script>'
         def fetch(url):
             if url.endswith('/robots.txt'): return 'User-agent: *\nAllow: /\n'
             if url.startswith('https://www.amazon.es/dp/'):
+                if block_amazon:
+                    raise c.StopSource('HTTP 403; paused for manual review', permanent=True)
                 return Path(f"tests/fixtures/amazon/{url.rsplit('/',1)[-1]}.html").read_text()
             if 'pickup-message' in url:
                 payload=json.loads(Path('tests/fixtures/apple-pickup.json').read_text())
@@ -278,5 +296,14 @@ class RunIntegrationTests(unittest.TestCase):
             sender=Mock(return_value={})
             self.assertEqual(self.run_monitor(config,state,sender,1792846801),0)
             self.assertEqual(sender.call_count,2)
+    def test_amazon_block_pauses_only_amazon_without_false_stock_result(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as directory:
+            config,state=self.setup_files(Path(directory));sender=Mock(return_value={})
+            self.assertEqual(self.run_monitor(config,state,sender,1792843200,block_amazon=True),0)
+            saved=json.loads(state.read_text())
+            self.assertTrue(saved['sources']['amazon']['paused'])
+            self.assertTrue(any(key.startswith('apple:') for key in saved['items']))
+            self.assertFalse(any(key.startswith('amazon:') for key in saved['items']))
 
 if __name__=='__main__':unittest.main()

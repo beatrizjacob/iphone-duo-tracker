@@ -1,6 +1,6 @@
 # iPhone Duo stock tracker
 
-Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring has been added; cloud access is being verified. Fnac and MediaMarkt store pickup have explicit coverage limits below.
+Apple pickup and MediaMarkt online checks are deployed on GitHub Actions. Amazon product-page monitoring has been added and both requested variants returned readable product identities and explicit no-offer messages from GitHub. Fnac and MediaMarkt store pickup have explicit coverage limits below.
 
 ## Stock-only scope
 
@@ -9,8 +9,8 @@ The tracker checks whether the requested white 256GB or 512GB variant is availab
 | Retailer | Automated stock coverage |
 |---|---|
 | Apple Spain | Enabled: Passeig de Gràcia (R368) and La Maquinista (R406), both capacities |
-| MediaMarkt Spain | Conditional page access; delayed orders do not count as stock. Local pickup remains unverified. |
-| Amazon Spain | White 256GB and 512GB, sold by Amazon only; live GitHub access verification pending |
+| MediaMarkt Spain | Conditional page access; delayed orders do not count as stock. Local pickup is blocked on GitHub, including an ordinary-browser test. |
+| Amazon Spain | White 256GB and 512GB, sold by Amazon only; local and cloud page layouts verified |
 | Fnac Spain | Disabled: direct HTTP 403 and browser CAPTCHA; no automated stock source verified |
 
 Apple’s separate pickup endpoint returned HTTP 200 in two local tests. The response matched both requested white variants and the two Barcelona stores. The tracker alerts per store and capacity, suppressing unchanged results. Missing or unknown data is not interpreted as out of stock.
@@ -136,9 +136,9 @@ The fixtures contain reduced, real Apple pickup, MediaMarkt and Amazon responses
 - `telegram_setup.py`: local token-safe private chat ID lookup.
 - `config.json`: product identities and explicit coverage limitations.
 - `.github/workflows/stock.yml`: schedule and manual Telegram test.
-- `tests/`: 50 meaningful offline tests, including local Git state recovery.
+- `tests/`: 56 meaningful offline tests, including local Git state recovery.
 - `VERIFICATION.md`: source evidence and precise blocked/unverified boundaries.
 
 ## Additional retailer research
 
-See [RESEARCH.md](RESEARCH.md) for verified Amazon variant IDs, MediaMarkt store-selector findings and Fnac alternatives. `Manual store-browser research` is an unscheduled, read-only feasibility test; it uses ordinary Chromium and stops at access protections. It is not a stock source and has no Telegram credentials.
+See [RESEARCH.md](RESEARCH.md) for verified Amazon variant IDs, MediaMarkt store-selector findings and Fnac alternatives. `Manual store-browser research` is an unscheduled, read-only feasibility test; it uses ordinary Chrome and stops at access protections. It is not a stock source and has no Telegram credentials.

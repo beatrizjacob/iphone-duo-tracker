@@ -225,6 +225,11 @@ def amazon_observation(html, product, merchant_id):
             ('apple iphone duo', f"{product['capacity_gb']} gb", 'blanco estelar'))):
         raise StopSource(f'Amazon product identity mismatch for {asin}; no stock conclusion')
     quote = page.field('availability')
+    no_offer = page.field('outOfStock')
+    # The verified GitHub response has no selected merchant and instead exposes
+    # this separate no-offer panel. Wishlist controls are unrelated to stock.
+    if not quote and re.match(r'^(?:no disponible|currently unavailable)\b', no_offer, re.I):
+        quote = re.split(r'Añadir a|Añadido a|Add to', no_offer, maxsplit=1, flags=re.I)[0].strip()
     normalized = quote.lower().strip()
     # Negative/future wording wins, including when the page accepts backorders.
     negative = re.search(r'sin stock|no disponible|no est[aá] disponible|agotad[oa]|'
@@ -232,7 +237,11 @@ def amazon_observation(html, product, merchant_id):
                          r'preventa|reserva|pre[- ]?order|temporarily', normalized)
     positive = re.match(r'^(?:en stock\b|in stock\b|solo quedan? \d+\b[^.]*\ben stock\b)', normalized)
     status = 'unavailable' if negative else 'available' if positive else 'unknown'
-    if page.inputs.get('merchantID') != {merchant_id}:
+    if status == 'available' and no_offer:
+        status = 'unknown'
+    selected_merchant = page.inputs.get('merchantID', set())
+    verified_no_offer = bool(no_offer and status == 'unavailable' and selected_merchant <= {''})
+    if selected_merchant != {merchant_id} and not verified_no_offer:
         status = 'unknown'
     return {'key': f'amazon:{asin}:online_stock', 'retailer': 'Amazon Spain',
             'capacity_gb': product['capacity_gb'], 'channel': 'online_stock',
