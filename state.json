@@ -3,11 +3,15 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1792869532.452348
+      "next_check": 1792866784.0806112,
+      "poll_interval_seconds": 300,
+      "last_success_at": 1792866484.0806112
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1792869532.452348
+      "next_check": 1792866784.0806112,
+      "poll_interval_seconds": 300,
+      "last_success_at": 1792866484.0806112
     },
     "fnac": {}
   },
@@ -119,6 +123,6 @@
       }
     }
   },
-  "last_run_utc": "2026-10-24T18:21:03.885738+00:00",
+  "last_run_utc": "2026-10-24T18:28:30.812015+00:00",
   "last_health": "f00ec2c51a394d57bb9caf5c89eb7677672d6a1ac146b6b78e4a225cb23e2b7c"
 }
