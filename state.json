@@ -3,9 +3,9 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793127785.6382983,
+      "next_check": 1793141945.1679914,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793127485.6382983
+      "last_success_at": 1793141645.1679914
     },
     "mediamarkt": {
       "failures": 5,
@@ -17,8 +17,8 @@
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793127785.6382983,
-      "last_success_at": 1793127485.6382983,
+      "next_check": 1793141945.1679914,
+      "last_success_at": 1793141645.1679914,
       "poll_interval_seconds": 300
     }
   },
@@ -125,13 +125,13 @@
         "retailer": "Amazon Spain",
         "capacity_gb": 512,
         "channel": "online_stock",
-        "status": "unavailable",
-        "raw_status": "No disponible por el momento. No sabemos cuándo este producto volverá a estar en stock.",
+        "status": "unknown",
+        "raw_status": "Missing/ambiguous availability text",
         "scope": "Sold by Amazon; Spain product-page stock, Barcelona checkout eligibility unverified",
         "url": "https://www.amazon.es/dp/B0HJB52JYX"
       }
     }
   },
-  "last_run_utc": "2026-10-27T18:58:42.479533+00:00",
-  "last_health": "77f3bf004e450fe885859c7458be5c8ff23871ccb788e30d4f8fcea1f00953e8"
+  "last_run_utc": "2026-10-27T22:54:43.163794+00:00",
+  "last_health": "f5454c6301021b391dafaaf44b2e2d64b486f3c42d59b4a71aa167870fe0d1e9"
 }
