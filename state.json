@@ -3,22 +3,22 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793315059.1034565,
+      "next_check": 1793327755.4828067,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793314759.1034565
+      "last_success_at": 1793327455.4828067
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1793315059.1034565,
+      "next_check": 1793327755.4828067,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793314759.1034565,
+      "last_success_at": 1793327455.4828067,
       "paused": false,
       "reason": "Product identity mismatch for 1674375; no stock conclusion"
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793315059.1034565,
-      "last_success_at": 1793314759.1034565,
+      "next_check": 1793327755.4828067,
+      "last_success_at": 1793327455.4828067,
       "poll_interval_seconds": 300
     }
   },
@@ -29,15 +29,14 @@
         "retailer": "Apple Spain",
         "capacity_gb": 256,
         "channel": "pickup",
-        "status": "available",
-        "raw_status": "available",
-        "quote": "Disponible Mañana",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
         "store_id": "R368",
         "store_name": "Passeig de Gràcia",
         "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
-      },
-      "last_alert": "f11172a574ba37984262bcf83ce9ed583d6023449fa22ba290bbd53e60a5ddd9"
+      }
     },
     "apple:MK2F4QL/A:pickup:R368": {
       "observed": {
@@ -133,6 +132,6 @@
       }
     }
   },
-  "last_run_utc": "2026-10-29T23:00:09.556125+00:00",
+  "last_run_utc": "2026-10-30T02:31:43.587817+00:00",
   "last_health": "f85704fb8c8b8a8baa7e71cc44f51362701a1512e75ae7b53c5629396b6115c0"
 }
