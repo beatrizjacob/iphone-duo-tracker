@@ -3,22 +3,22 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793375201.8249388,
+      "next_check": 1793391239.2300415,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793374901.8249388
+      "last_success_at": 1793390939.2300415
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1793375201.8249388,
+      "next_check": 1793391239.2300415,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793374901.8249388,
+      "last_success_at": 1793390939.2300415,
       "paused": false,
       "reason": "Product identity mismatch for 1674375; no stock conclusion"
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793375201.8249388,
-      "last_success_at": 1793374901.8249388,
+      "next_check": 1793391239.2300415,
+      "last_success_at": 1793390939.2300415,
       "poll_interval_seconds": 300
     }
   },
@@ -74,15 +74,14 @@
         "retailer": "Apple Spain",
         "capacity_gb": 512,
         "channel": "pickup",
-        "status": "available",
-        "raw_status": "available",
-        "quote": "Disponible hoy",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
         "store_id": "R406",
         "store_name": "La Maquinista",
         "scope": "Apple La Maquinista, Barcelona (R406)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-512gb-blanco-estelar"
-      },
-      "last_alert": "46968b87c25f59bd30b1cdef686273c7ae4428e8d690b807c5065191f17360de"
+      }
     },
     "mediamarkt:1674375:online_stock": {
       "observed": {
@@ -133,6 +132,6 @@
       }
     }
   },
-  "last_run_utc": "2026-10-30T15:42:28.244967+00:00",
+  "last_run_utc": "2026-10-30T20:09:48.443392+00:00",
   "last_health": "f85704fb8c8b8a8baa7e71cc44f51362701a1512e75ae7b53c5629396b6115c0"
 }
