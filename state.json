@@ -3,22 +3,22 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793486889.7340748,
+      "next_check": 1793496969.236993,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793486589.7340748
+      "last_success_at": 1793496669.236993
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1793486889.7340748,
+      "next_check": 1793496969.236993,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793486589.7340748,
+      "last_success_at": 1793496669.236993,
       "paused": false,
       "reason": "Product identity mismatch for 1674375; no stock conclusion"
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793486889.7340748,
-      "last_success_at": 1793486589.7340748,
+      "next_check": 1793496969.236993,
+      "last_success_at": 1793496669.236993,
       "poll_interval_seconds": 300
     }
   },
@@ -132,6 +132,6 @@
       }
     }
   },
-  "last_run_utc": "2026-10-31T22:43:58.392162+00:00",
+  "last_run_utc": "2026-11-01T01:32:00.558393+00:00",
   "last_health": "f85704fb8c8b8a8baa7e71cc44f51362701a1512e75ae7b53c5629396b6115c0"
 }
