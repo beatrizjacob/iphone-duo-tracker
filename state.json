@@ -3,22 +3,22 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793649356.944077,
+      "next_check": 1793671099.3038056,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793649056.944077
+      "last_success_at": 1793670799.3038056
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1793649356.944077,
+      "next_check": 1793671099.3038056,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793649056.944077,
+      "last_success_at": 1793670799.3038056,
       "paused": false,
       "reason": "Product identity mismatch for 1674375; no stock conclusion"
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793649356.944077,
-      "last_success_at": 1793649056.944077,
+      "next_check": 1793671099.3038056,
+      "last_success_at": 1793670799.3038056,
       "poll_interval_seconds": 300
     }
   },
@@ -102,7 +102,7 @@
         "capacity_gb": 512,
         "channel": "online_stock",
         "status": "unavailable",
-        "raw_status": "NOT_AVAILABLE",
+        "raw_status": "AVAILABLE_OUTSIDE_REASONABLE_TIME_FRAME",
         "scope": "Spain-wide page; Barcelona postcode eligibility unverified",
         "url": "https://www.mediamarkt.es/es/product/_apple-iphone-duo-blanco-estrella-512-gb-76-oled-super-retina-xdr-plegable-5g-chip-a20-pro-siri-ai-ios-1674377.html"
       }
@@ -113,8 +113,8 @@
         "retailer": "Amazon Spain",
         "capacity_gb": 256,
         "channel": "online_stock",
-        "status": "unknown",
-        "raw_status": "Missing/ambiguous availability text",
+        "status": "unavailable",
+        "raw_status": "Agotado temporalmente. Estamos trabajando para volver a tenerlo en stock lo antes posible.",
         "scope": "Sold by Amazon; Spain product-page stock, Barcelona checkout eligibility unverified",
         "url": "https://www.amazon.es/dp/B0HJ9QGJJJ"
       }
@@ -132,6 +132,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-02T19:51:48.234837+00:00",
-  "last_health": "36d60178ba348fd36a62b58aee89abe7b5209a1bf81eac8eb26908dc91d06403"
+  "last_run_utc": "2026-11-03T01:54:11.747086+00:00",
+  "last_health": "f85704fb8c8b8a8baa7e71cc44f51362701a1512e75ae7b53c5629396b6115c0"
 }
