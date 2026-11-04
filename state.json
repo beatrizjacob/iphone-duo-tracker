@@ -3,22 +3,22 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793785589.9321287,
+      "next_check": 1793813892.0202298,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793785289.9321287
+      "last_success_at": 1793813592.0202298
     },
     "mediamarkt": {
       "failures": 0,
-      "next_check": 1793785589.9321287,
+      "next_check": 1793813892.0202298,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793785289.9321287,
+      "last_success_at": 1793813592.0202298,
       "paused": false,
       "reason": "Product identity mismatch for 1674375; no stock conclusion"
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793785589.9321287,
-      "last_success_at": 1793785289.9321287,
+      "next_check": 1793813892.0202298,
+      "last_success_at": 1793813592.0202298,
       "poll_interval_seconds": 300
     }
   },
@@ -60,15 +60,14 @@
         "retailer": "Apple Spain",
         "capacity_gb": 256,
         "channel": "pickup",
-        "status": "available",
-        "raw_status": "available",
-        "quote": "Disponible hoy",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
         "store_id": "R406",
         "store_name": "La Maquinista",
         "scope": "Apple La Maquinista, Barcelona (R406)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
-      },
-      "last_alert": "46968b87c25f59bd30b1cdef686273c7ae4428e8d690b807c5065191f17360de"
+      }
     },
     "apple:MK2F4QL/A:pickup:R406": {
       "observed": {
@@ -134,6 +133,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-04T09:42:22.491667+00:00",
+  "last_run_utc": "2026-11-04T17:34:04.163005+00:00",
   "last_health": "36d60178ba348fd36a62b58aee89abe7b5209a1bf81eac8eb26908dc91d06403"
 }
