@@ -3,23 +3,25 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793966404.0173223,
+      "next_check": 1793992089.5380855,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793966104.0173223
+      "last_success_at": 1793991789.5380855
     },
     "mediamarkt": {
-      "failures": 4,
-      "next_check": 1793966195.1814969,
+      "failures": 5,
+      "next_check": 1794049389.5380855,
       "poll_interval_seconds": 300,
       "last_success_at": 1793848729.922692,
       "paused": false,
-      "reason": "Product identity mismatch for 1674375; no stock conclusion"
+      "reason": "Product identity mismatch for 1674377; no stock conclusion"
     },
     "amazon": {
-      "failures": 0,
-      "next_check": 1793966404.0173223,
+      "failures": 1,
+      "next_check": 1793995389.5380855,
       "last_success_at": 1793966104.0173223,
-      "poll_interval_seconds": 300
+      "poll_interval_seconds": 300,
+      "paused": false,
+      "reason": "HTTP 503; no stock conclusion"
     }
   },
   "items": {
@@ -29,15 +31,14 @@
         "retailer": "Apple Spain",
         "capacity_gb": 256,
         "channel": "pickup",
-        "status": "available",
-        "raw_status": "available",
-        "quote": "Disponible hoy",
+        "status": "unavailable",
+        "raw_status": "unavailable",
+        "quote": "No disponible en este momento",
         "store_id": "R368",
         "store_name": "Passeig de Gràcia",
         "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
-      },
-      "last_alert": "f11172a574ba37984262bcf83ce9ed583d6023449fa22ba290bbd53e60a5ddd9"
+      }
     },
     "apple:MK2F4QL/A:pickup:R368": {
       "observed": {
@@ -133,6 +134,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-06T11:55:40.468651+00:00",
-  "last_health": "78f2c994bc7685a174c9c9bc7e23041f11c4549f3b2a98b59bdbae70cfa89d67"
+  "last_run_utc": "2026-11-06T19:03:46.692163+00:00",
+  "last_health": "20971022ac7deab865b249ee7d743dde0e4501e8f6542aaa4bfe014d237bec7f"
 }
