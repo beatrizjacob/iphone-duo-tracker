@@ -3,9 +3,9 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793937695.1814969,
+      "next_check": 1793966404.0173223,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793937395.1814969
+      "last_success_at": 1793966104.0173223
     },
     "mediamarkt": {
       "failures": 4,
@@ -17,8 +17,8 @@
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793937695.1814969,
-      "last_success_at": 1793937395.1814969,
+      "next_check": 1793966404.0173223,
+      "last_success_at": 1793966104.0173223,
       "poll_interval_seconds": 300
     }
   },
@@ -29,14 +29,15 @@
         "retailer": "Apple Spain",
         "capacity_gb": 256,
         "channel": "pickup",
-        "status": "unavailable",
-        "raw_status": "unavailable",
-        "quote": "No disponible en este momento",
+        "status": "available",
+        "raw_status": "available",
+        "quote": "Disponible hoy",
         "store_id": "R368",
         "store_name": "Passeig de Gràcia",
         "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
-      }
+      },
+      "last_alert": "f11172a574ba37984262bcf83ce9ed583d6023449fa22ba290bbd53e60a5ddd9"
     },
     "apple:MK2F4QL/A:pickup:R368": {
       "observed": {
@@ -113,8 +114,8 @@
         "retailer": "Amazon Spain",
         "capacity_gb": 256,
         "channel": "online_stock",
-        "status": "unknown",
-        "raw_status": "Missing/ambiguous availability text",
+        "status": "unavailable",
+        "raw_status": "Agotado temporalmente. Estamos trabajando para volver a tenerlo en stock lo antes posible.",
         "scope": "Sold by Amazon; Spain product-page stock, Barcelona checkout eligibility unverified",
         "url": "https://www.amazon.es/dp/B0HJ9QGJJJ"
       }
@@ -132,6 +133,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-06T03:57:24.767936+00:00",
-  "last_health": "6e2cf08fbeded402206af1de0eccdd2d2287878e821624289d828cdf5a841d10"
+  "last_run_utc": "2026-11-06T11:55:40.468651+00:00",
+  "last_health": "78f2c994bc7685a174c9c9bc7e23041f11c4549f3b2a98b59bdbae70cfa89d67"
 }
