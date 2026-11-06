@@ -3,13 +3,13 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1793923001.2111373,
+      "next_check": 1793937695.1814969,
       "poll_interval_seconds": 300,
-      "last_success_at": 1793922701.2111373
+      "last_success_at": 1793937395.1814969
     },
     "mediamarkt": {
-      "failures": 3,
-      "next_check": 1793937101.2111373,
+      "failures": 4,
+      "next_check": 1793966195.1814969,
       "poll_interval_seconds": 300,
       "last_success_at": 1793848729.922692,
       "paused": false,
@@ -17,8 +17,8 @@
     },
     "amazon": {
       "failures": 0,
-      "next_check": 1793923001.2111373,
-      "last_success_at": 1793922701.2111373,
+      "next_check": 1793937695.1814969,
+      "last_success_at": 1793937395.1814969,
       "poll_interval_seconds": 300
     }
   },
@@ -132,6 +132,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-05T23:52:31.258746+00:00",
+  "last_run_utc": "2026-11-06T03:57:24.767936+00:00",
   "last_health": "6e2cf08fbeded402206af1de0eccdd2d2287878e821624289d828cdf5a841d10"
 }
