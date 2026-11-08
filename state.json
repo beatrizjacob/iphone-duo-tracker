@@ -3,9 +3,9 @@
   "sources": {
     "apple": {
       "failures": 0,
-      "next_check": 1794095827.0303767,
+      "next_check": 1794107852.8125772,
       "poll_interval_seconds": 300,
-      "last_success_at": 1794095527.0303767
+      "last_success_at": 1794107552.8125772
     },
     "mediamarkt": {
       "failures": 6,
@@ -134,6 +134,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-07T23:52:19.383909+00:00",
+  "last_run_utc": "2026-11-08T03:12:44.499681+00:00",
   "last_health": "20971022ac7deab865b249ee7d743dde0e4501e8f6542aaa4bfe014d237bec7f"
 }
