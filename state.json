@@ -2,10 +2,12 @@
   "version": 1,
   "sources": {
     "apple": {
-      "failures": 0,
-      "next_check": 1794668512.715599,
+      "failures": 1,
+      "next_check": 1794689301.025596,
       "poll_interval_seconds": 300,
-      "last_success_at": 1794668212.715599
+      "last_success_at": 1794668212.715599,
+      "paused": true,
+      "reason": "HTTP 541; paused for manual review"
     },
     "mediamarkt": {
       "failures": 12,
@@ -134,6 +136,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-14T14:57:04.600107+00:00",
-  "last_health": "f4152f2f6cf06fc846c4288bdb982cac0c5f45cef1cdc8f68b26f37638cf3686"
+  "last_run_utc": "2026-11-14T19:48:33.738689+00:00",
+  "last_health": "f79182328ea80ed2fe4f4f24973721a87970d6373d3927dec72e5162b440ad75"
 }
