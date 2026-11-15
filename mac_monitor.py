@@ -5,7 +5,7 @@ from html import unescape
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from checker import robots_rules, StopSource
-URL = "https://www.apple.com/es/shop/buy-mac/mac-studio/chip-m5-max-cpu-de-18-n%C3%BAcleos-gpu-de-40-n%C3%BAcleos-128-gb-de-memoria-1tb-de-capacidad"
+URL = "https://www.apple.com/es/shop/buy-mac/mac-studio"
 STATE = Path("state.json")
 
 def classify(html):
