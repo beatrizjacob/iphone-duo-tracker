@@ -18,8 +18,8 @@
       "reason": "HTTP 403; paused for manual review"
     },
     "amazon": {
-      "failures": 11,
-      "next_check": 1794729608.123148,
+      "failures": 12,
+      "next_check": 1794825168.2605333,
       "last_success_at": 1793966104.0173223,
       "poll_interval_seconds": 300,
       "paused": false,
@@ -136,6 +136,6 @@
       }
     }
   },
-  "last_run_utc": "2026-11-15T02:57:26.675754+00:00",
+  "last_run_utc": "2026-11-15T10:33:00.951502+00:00",
   "last_health": "f79182328ea80ed2fe4f4f24973721a87970d6373d3927dec72e5162b440ad75"
 }
