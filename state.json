@@ -37,8 +37,8 @@
         "raw_status": "unavailable",
         "quote": "No disponible en este momento",
         "store_id": "R368",
-        "store_name": "Passeig de Gràcia",
-        "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
+        "store_name": "Passeig de Gr\u00e0cia",
+        "scope": "Apple Passeig de Gr\u00e0cia, Barcelona (R368)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-256gb-blanco-estelar"
       }
     },
@@ -52,8 +52,8 @@
         "raw_status": "unavailable",
         "quote": "No disponible en este momento",
         "store_id": "R368",
-        "store_name": "Passeig de Gràcia",
-        "scope": "Apple Passeig de Gràcia, Barcelona (R368)",
+        "store_name": "Passeig de Gr\u00e0cia",
+        "scope": "Apple Passeig de Gr\u00e0cia, Barcelona (R368)",
         "url": "https://www.apple.com/es/shop/buy-iphone/iphone-duo/pantalla-de-7%2C6%E2%80%B3-512gb-blanco-estelar"
       }
     },
@@ -137,5 +137,10 @@
     }
   },
   "last_run_utc": "2026-11-15T21:59:30.840275+00:00",
-  "last_health": "f79182328ea80ed2fe4f4f24973721a87970d6373d3927dec72e5162b440ad75"
+  "last_health": "f79182328ea80ed2fe4f4f24973721a87970d6373d3927dec72e5162b440ad75",
+  "mac_studio_128gb": {
+    "initialized": true,
+    "status": "unknown",
+    "reason": "No verified exact-config inventory signal on public page"
+  }
 }
