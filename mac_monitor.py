@@ -11,10 +11,10 @@ STATE = Path("state.json")
 def classify(html):
     text = unescape(html)
     visible = " ".join(re.sub(r"<[^>]*>", " ", text).lower().split())
-    if not (re.search(r"mac\\s*studio", visible) and re.search(r"m5\\s*max", visible)
-            and re.search(r"128\\s*gb\\s*(?:de\\s*)?memoria", visible)):
+    if not (re.search(r"mac\s*studio", visible) and re.search(r"m5\s*max", visible)
+            and re.search(r"128\s*gb\s*(?:de\s*)?memoria", visible)):
         return "unknown", "Exact 128 GB configuration not proven by page"
-    scripts = re.findall(r"<script[^>]*type=[\"']application/ld\\+json[\"'][^>]*>(.*?)</script>", html, re.I | re.S)
+    scripts = re.findall(r"<script[^>]*type=[\"']application/ld\+json[\"'][^>]*>(.*?)</script>", html, re.I | re.S)
     def walk(obj):
         if isinstance(obj, list):
             for x in obj: yield from walk(x)
@@ -76,13 +76,13 @@ def main():
     if args.dry_run: return
     if status == "available" and prev.get("status") != "available":
         now = datetime.datetime.now(ZoneInfo("Europe/Madrid")).strftime("%d %b %H:%M")
-        send("Mac Studio M5 Max / 128 GB / 1 TB: Apple Spain exact product offer reports IN STOCK. Confirm at checkout.\\n" + URL + "\\nBarcelona " + now)
+        send("Mac Studio M5 Max / 128 GB / 1 TB: Apple Spain exact product offer reports IN STOCK. Confirm at checkout.\n" + URL + "\nBarcelona " + now)
     elif not prev.get("initialized"):
-        send("Mac Studio Apple-only monitoring enabled (M5 Max, 128 GB, 1 TB). Current status: " + status + ". " + reason + ".\\n" + URL)
+        send("Mac Studio Apple-only monitoring enabled (M5 Max, 128 GB, 1 TB). Current status: " + status + ". " + reason + ".\n" + URL)
     elif status == "unknown" and prev.get("status") != "unknown":
         send("Mac Studio check cannot confirm availability. No stock claim. " + reason)
     state["mac_studio_128gb"] = {"initialized":True, "status":status, "reason":reason}
-    STATE.write_text(json.dumps(state, indent=2) + "\\n")
+    STATE.write_text(json.dumps(state, indent=2) + "\n")
 
 if __name__ == "__main__":
     main()
