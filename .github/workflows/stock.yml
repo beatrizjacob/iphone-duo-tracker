@@ -28,6 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Run Mac monitor tests
+        run: python -m unittest discover -s tests -p 'test_mac_monitor.py' -v
       - name: Validate Mac monitor Python
         run: python -m py_compile mac_monitor.py
       - name: Verify retailer access
