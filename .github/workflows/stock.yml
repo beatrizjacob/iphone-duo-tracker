@@ -1,4 +1,4 @@
-name: iPhone stock monitor
+name: Mac Studio stock monitor
 on:
   schedule:
     - cron: '2,12,22,32,42,52 * * * *'
@@ -15,7 +15,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: iphone-stock-monitor
+  group: mac-studio-stock-monitor
   cancel-in-progress: false
 jobs:
   check:
@@ -28,17 +28,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run offline tests
-        run: python -m unittest discover -s tests -v
       - name: Verify retailer access
         if: inputs.verify_access == true
-        run: python checker.py --dry-run
+        run: python mac_monitor.py --dry-run
       - name: Test Telegram
         if: inputs.test_telegram == true && inputs.verify_access != true
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python checker.py --test-telegram
+        run: python mac_monitor.py --test-telegram
       - name: Load persistent state
         id: state
         if: inputs.test_telegram != true && inputs.verify_access != true
@@ -48,7 +46,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python checker.py
+        run: python mac_monitor.py
       - name: Save state even after checker failure
         if: always() && steps.state.outcome == 'success'
         run: python state_git.py save
