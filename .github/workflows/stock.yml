@@ -28,6 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Validate Mac monitor Python
+        run: python -m py_compile mac_monitor.py
       - name: Verify retailer access
         if: inputs.verify_access == true
         run: python mac_monitor.py --dry-run
